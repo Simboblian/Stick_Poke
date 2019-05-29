@@ -25,26 +25,27 @@ bool Engine::Init()
 {
 	bool passInit = true;
 
-	m_Window = new RenderWindow(VideoMode(WINDOWSIZEX, WINDOWSIZEY), "Stick Poke"/*, sf::Style::Fullscreen*/);
+	m_Window = new sf::RenderWindow(sf::VideoMode(WINDOWSIZEX, WINDOWSIZEY), "Stick Poke"/*, sf::Style::Fullscreen*/);
 	m_Window->setFramerateLimit(FPS_DEFAULT);
 
 	if (!m_Window)
 		passInit = false;
 
-	m_Camera = new Camera(Vector2f(WINDOWSIZEX, WINDOWSIZEY));
-	m_Camera->SetPosition(Vector2f(WINDOWSIZEX / 2, WINDOWSIZEY / 2));
+	m_Camera = new Camera(sf::Vector2f(WINDOWSIZEX, WINDOWSIZEY));
+	m_Camera->SetPosition(sf::Vector2f(WINDOWSIZEX / 2, WINDOWSIZEY / 2));
 
-	m_B2World = new b2World(b2Vec2(0.0f, GRAVITY));
-	m_World = new World(*m_B2World, Vector2f(1600, 100));
-	
-	m_Character = new Character(*m_B2World);
+	m_ObjectManager = new ObjectManager();
+
+	//Create the world and add it's objects to the game;
+	m_World = new World(sf::Vector2f(1600, 100));
+	for (int i = 0; i < m_World->GetLandList().size(); i++)
+		m_ObjectManager->AddObject(m_World->GetLandList()[i]);
+
+	//Create the character and add it's objects to the game;
+	m_Character = new Character();
+	m_ObjectManager->AddObject(m_Character);
 
 	m_Player = new Player();
-
-	m_DebugDraw = new SFMLDebugDraw(*m_Window);
-	m_B2World->SetDebugDraw(m_DebugDraw);
-	m_DebugDraw->SetFlags(b2Draw::e_shapeBit);
-	m_DebugDraw->AppendFlags(b2Draw::e_jointBit);
 	
 	return passInit;
 }
@@ -52,11 +53,11 @@ bool Engine::Init()
 // Pocessing inputs from keyboard, mouse, joystick etc.
 void Engine::ProcessInput()
 {
-	Event evt;
+	sf::Event evt;
 
 	while (m_Window->pollEvent(evt))
 	{
-		if (evt.type == Event::Closed || Keyboard::isKeyPressed(Keyboard::Escape))
+		if (evt.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 			m_Window->close();
 	}
 
@@ -66,11 +67,8 @@ void Engine::ProcessInput()
 // Updates the game
 void Engine::Update()
 {
-	m_B2World->Step(1 / FPS_DEFAULT, 160, 160);
-
-	m_World->Update();
 	m_Player->Update();
-	m_Character->Update();
+	m_ObjectManager->Update(GRAVITY);
 	m_Camera->SetPosition(m_World->GetCenter());
 	m_Camera->Update(*m_Window);
 }
@@ -78,10 +76,8 @@ void Engine::Update()
 // Rendering the game to the screen
 void Engine::RenderFrame()
 {
-	m_Window->clear(Color::Black);
-	m_World->Draw(*m_Window);
-	m_Character->Draw(*m_Window);
-	m_B2World->DrawDebugData();
+	m_Window->clear(sf::Color::Black);
+	m_ObjectManager->Draw(*m_Window);
 	m_Window->display();
 }
 
