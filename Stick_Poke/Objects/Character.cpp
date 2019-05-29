@@ -2,7 +2,8 @@
 
 void Character::Draw(RenderWindow &Window)
 {
-	//Window.draw(m_Rect);
+	Window.draw(m_Rect);
+	m_Weapon->Draw(Window, true);
 }
 
 void Character::Update()
@@ -10,9 +11,10 @@ void Character::Update()
 	b2Vec2 worldCenter = m_Body->GetWorldCenter();
 	m_Velocity = Vector2f(m_Body->GetLinearVelocity().x, 0.0f);
 
-	if (Keyboard::isKeyPressed(Keyboard::A))
+
+	if (Joystick::getAxisPosition(0, Joystick::Axis::X) <= -20.0f)
 		m_Velocity.x = -1.0f;
-	else if (Keyboard::isKeyPressed(Keyboard::D))
+	else if (Joystick::getAxisPosition(0, Joystick::Axis::X) >= 20.0f)
 		m_Velocity.x = 1.0f;
 	else
 		m_Velocity.x = 0.0f;
@@ -20,19 +22,33 @@ void Character::Update()
 	if (Keyboard::isKeyPressed(Keyboard::LShift))
 		m_Body->ApplyLinearImpulse(b2Vec2(m_Velocity.x < 0 ? -10.0f : 10.0f, 0.0f), worldCenter, true);
 
+	Vector2f controller;
+	controller.x = Joystick::getAxisPosition(0, Joystick::Axis::U);
+	controller.y = Joystick::getAxisPosition(0, Joystick::Axis::V);
+
 	m_Body->ApplyLinearImpulse(b2Vec2(m_Velocity.x, m_Velocity.y), worldCenter, true);
-	m_Position = Vector2f(m_Body->GetPosition().x * SCALE, m_Body->GetPosition().y * SCALE);
-	//m_Position += m_Velocity;
+	m_Position = Vector2f(B2VECtoSFVEC(m_Body->GetPosition(), true));
 	m_Rect.setPosition(m_Position);
 
+	m_Weapon->Update(controller, m_Position, false, false);
 }
 
 Character::Character(b2World &World)
 {
-	m_Rect.setSize(Vector2f(50.0f, 75.0f));
+	m_Rect.setSize(Vector2f(50.0f, 100.0f));
 	m_Rect.setOrigin(m_Rect.getSize().x / 2, m_Rect.getSize().y / 2);
 	m_Rect.setPosition(m_Position);
 	m_Rect.setFillColor(Color::Yellow);
+
+	m_BackBicep.setSize(Vector2f(10.0f, 40.0f));
+	m_BackBicep.setOrigin(m_Rect.getSize().x / 2, m_Rect.getSize().y / 2);
+	m_BackBicep.setPosition(m_Position);
+	m_BackBicep.setFillColor(Color::Red);
+
+	m_BackBicep.setSize(Vector2f(10.0f, 40.0f));
+	m_BackForearm.setOrigin(m_Rect.getSize().x / 2, m_Rect.getSize().y / 2);
+	m_BackForearm.setPosition(m_Position);
+	m_BackForearm.setFillColor(Color::Red);
 
 	b2BodyDef BodyDef;
 	BodyDef.type = b2_dynamicBody;
@@ -49,49 +65,16 @@ Character::Character(b2World &World)
 	m_Body->SetFixedRotation(true);
 	m_Body->CreateFixture(&fixtureDef);
 
-	//CREATE CHAIN
-	b2PolygonShape shape;
-	shape.SetAsBox(0.6f, 0.125f);
+	m_Weapon = new Weapon();
+	m_Weapon->SetAnchorOffset(Vector2f(-75.0, 15.0f));
+	m_Weapon->SetControlRadius(50.0f);
+	m_Weapon->SetControlOffset(Vector2f(75.0f, 0.0f));
+	m_Weapon->SetWeaponSize(Vector2f(180.0, 10.0f));
+	m_Weapon->SetWeaponOrigin(Vector2f(160.0, 5.0f));
+	m_Weapon->SetHitboxOffset(Vector2f(15.0, 0.0f));
+	m_Weapon->SetHitboxRadius(7.5f);
 
-	b2FixtureDef fd;
-	fd.shape = &shape;
-	fd.density = 20.0f;
-	fd.friction = 0.2f;
-
-	b2RevoluteJointDef jd;
-	jd.collideConnected = false;
-
-	const float32 y = 25.0f;
-	b2Body* prevBody = m_Body;
-	for (int32 i = 0; i < 5; ++i)
-	{
-		b2BodyDef bd;
-		bd.type = b2_dynamicBody;
-		bd.position.Set(0.5f + i, y);
-		b2Body* body = World.CreateBody(&bd);
-		body->CreateFixture(&fd);
-
-		b2Vec2 anchor(float32(i), y);
-		jd.Initialize(prevBody, body, anchor);
-		World.CreateJoint(&jd);
-
-		prevBody = body;
-	}
-
-	b2CircleShape cShape;
-	cShape.m_radius = 1.5f;
-	fd.shape = &cShape;
-	fd.density = 1.0f;
-	fd.friction = 0.2f;
-
-	b2BodyDef bd;
-	bd.type = b2_dynamicBody;
-	bd.position.Set(6.5f, y);
-	b2Body* body = World.CreateBody(&bd);
-	body->CreateFixture(&fd);
-	b2Vec2 anchor(float32(5), y);
-	jd.Initialize(prevBody, body, anchor);
-	World.CreateJoint(&jd);
+	m_State = STANDING;
 }
 
 Character::Character()

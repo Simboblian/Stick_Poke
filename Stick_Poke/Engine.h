@@ -7,12 +7,13 @@
 #include "World\World.h"
 #include "Camera\Camera.h"
 #include "Objects\Character.h"
+#include "Player\Player.h"
 
 #define FPS_DEFAULT 60.0f
 #define SCALE 32.0f
 #define GRAVITY 9.8f
-#define WINDOWSIZEX 1920
-#define WINDOWSIZEY 1080
+#define WINDOWSIZEX 1280
+#define WINDOWSIZEY 768
 
 using namespace sf;
 
@@ -26,6 +27,7 @@ private:
 
 	World* m_World;
 	Camera* m_Camera;
+	Player* m_Player;
 	Character* m_Character;
 
 	bool Init();

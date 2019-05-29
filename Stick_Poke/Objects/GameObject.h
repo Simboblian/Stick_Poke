@@ -16,9 +16,12 @@ protected:
 
 	b2Vec2 SFVECtoB2VEC(Vector2f vector, bool scale = false) { return b2Vec2(vector.x / (scale ? SCALE : 1.f), vector.y / (scale ? SCALE : 1.f)); };
 	Vector2f B2VECtoSFVEC(b2Vec2 vector, bool scale = false) { return Vector2f(vector.x * (scale ? SCALE : 1.f), vector.y * (scale ? SCALE : 1.f)); };
+
+	virtual Vector2f GetPosition() { return m_Position; };
+	virtual void SetPosition(Vector2f Position) { m_Position = Position; };
 public:
-	void Draw(RenderWindow &Window);
-	void Update();
+	virtual void Draw(RenderWindow &Window);
+	virtual void Update();
 
 	GameObject();
 	~GameObject();

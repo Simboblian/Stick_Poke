@@ -15,7 +15,7 @@ class World
 {
 private:
 	vector<RectangleShape*> m_RectList;
-	Vector2f m_Position, m_Origin, m_Size;
+	Vector2f m_Position, m_Origin, m_Size, m_Center;
 	Color m_Color1 = Color::Magenta, m_Color2 = Color::Blue;
 	b2Body* m_Body;
 
@@ -24,6 +24,8 @@ private:
 public:
 	void Update();
 	void Draw(RenderWindow &Window);
+	Vector2f GetPosition() { return m_Position; };
+	Vector2f GetCenter() { return m_Center; };
 
 	World(b2World &World, Vector2f Size);
 	World();

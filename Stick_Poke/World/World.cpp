@@ -19,6 +19,7 @@ World::World(b2World &World, Vector2f Size)
 	m_Size = Size;
 	m_Origin = Vector2f(Size.x / 2, Size.y / 2);
 	m_Position = Vector2f(512, 706);
+	m_Center = Vector2f(m_Position.x, m_Position.y / 2);
 
 	int capacity = ((int)m_Size.x - ((int)m_Size.x % SIZE)) / SIZE;
 
