@@ -17,7 +17,7 @@ public:
 
 	sf::Vector2f GetCenter();
 
-	World(sf::Vector2f Size);
+	World(b2World &World, sf::Vector2f Size);
 	World();
 	~World();
 };

@@ -5,15 +5,6 @@ void ObjectManager::Update(sf::Vector2f Gravity)
 	for (int i = 0; i < m_Objects.size(); i++)
 	{
 		m_Objects[i]->Update(Gravity);
-
-		for (int j = 0; j < m_Objects.size(); j++)
-		{
-			if (m_Objects[i] == m_Objects[j])
-				continue;
-
-			if (CollisionHandler::RectRect(m_Objects[i]->GetShape(), m_Objects[j]->GetShape()))
-				m_Objects[i]->SetState(STANDING);
-		}
 	}
 }
 

@@ -26,9 +26,9 @@ sf::Vector2f World::GetCenter()
 	return result;
 }
 
-World::World(sf::Vector2f Size)
+World::World(b2World &World, sf::Vector2f Size)
 {
-	Land *l = new Land(Size);
+	Land *l = new Land(World, Size);
 	m_LandList.push_back(l);
 }
 

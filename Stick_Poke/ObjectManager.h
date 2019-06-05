@@ -3,7 +3,6 @@
 
 #include <vector>
 #include "GameObject.h"
-#include "CollisionHandler.h"
 
 class ObjectManager
 {

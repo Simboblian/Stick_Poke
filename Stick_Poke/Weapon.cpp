@@ -1,6 +1,5 @@
 #include "Weapon.h"
 
-
 Weapon::Weapon()
 {
 	m_Position = sf::Vector2f(0, 0);
@@ -12,14 +11,14 @@ Weapon::Weapon()
 	m_Circle.setFillColor(sf::Color::Transparent);
 	m_Circle.setOutlineColor(sf::Color::White);
 	m_Circle.setOutlineThickness(1.0f);
-	m_Circle.setPosition(m_Position.x + DEFAULT_RADIUS - (halfRadius), m_Position.y + DEFAULT_RADIUS - (halfRadius));
+	m_Circle.setPosition(m_Position.x + halfRadius, m_Position.y + halfRadius);
 
-	m_ControlPos = sf::Vector2f(m_Circle.getPosition().x + (halfRadius), m_Circle.getPosition().y + (halfRadius));
+	m_ControlPos = sf::Vector2f(m_Circle.getPosition().x + halfRadius, m_Circle.getPosition().y + halfRadius);
 	m_ControlOffset = sf::Vector2f(DEFAULT_RADIUS, 0.0f);
-	m_AnchorPos = sf::Vector2f(m_Circle.getPosition().x + (halfRadius), m_Circle.getPosition().y + (halfRadius));
+	m_AnchorPos = sf::Vector2f(m_Circle.getPosition().x + halfRadius, m_Circle.getPosition().y + halfRadius);
 	m_AnchorOffset = sf::Vector2f(-DEFAULT_RADIUS, 0.0f);
 	m_FrontHandOffset = 50;
-	m_BackHandOffset = 100;
+	m_BackHandOffset = 115;
 
 	m_ControlCircle.setRadius(DEFAULT_DEBUG_RADIUS);
 	m_ControlCircle.setOrigin(DEFAULT_DEBUG_RADIUS, DEFAULT_DEBUG_RADIUS);
@@ -77,28 +76,28 @@ Weapon::Weapon(float radius, sf::Vector2f CirclePos, sf::Vector2f ControlOffset,
 	m_AnchorPos = sf::Vector2f(circleX + (halfRadius) + AnchorPos.x, circleY + (halfRadius) + AnchorPos.y);
 	m_AnchorOffset = AnchorOffset;
 	m_FrontHandOffset = 50;
-	m_BackHandOffset = 100;
+	m_BackHandOffset = 115;
 
-	m_ControlCircle.setRadius(4.0f);
-	m_ControlCircle.setOrigin(4.0f, 4.0f);
+	m_ControlCircle.setRadius(DEFAULT_DEBUG_RADIUS);
+	m_ControlCircle.setOrigin(DEFAULT_DEBUG_RADIUS, DEFAULT_DEBUG_RADIUS);
 	m_ControlCircle.setFillColor(sf::Color::Blue);
 	m_ControlCircle.setOutlineColor(sf::Color(0, 0, 0, 0));
 	m_ControlCircle.setPosition(m_ControlPos);
 
-	m_AnchorCircle.setRadius(4.0f);
-	m_AnchorCircle.setOrigin(4.0f, 4.0f);
+	m_AnchorCircle.setRadius(DEFAULT_DEBUG_RADIUS);
+	m_AnchorCircle.setOrigin(DEFAULT_DEBUG_RADIUS, DEFAULT_DEBUG_RADIUS);
 	m_AnchorCircle.setFillColor(sf::Color::Red);
 	m_AnchorCircle.setOutlineColor(sf::Color(0, 0, 0, 0));
 	m_AnchorCircle.setPosition(m_AnchorPos);
 
-	m_FrontHandCircle.setRadius(4.0f);
-	m_FrontHandCircle.setOrigin(4.0f, 4.0f);
+	m_FrontHandCircle.setRadius(DEFAULT_DEBUG_RADIUS);
+	m_FrontHandCircle.setOrigin(DEFAULT_DEBUG_RADIUS, DEFAULT_DEBUG_RADIUS);
 	m_FrontHandCircle.setFillColor(sf::Color::Cyan);
 	m_FrontHandCircle.setOutlineColor(sf::Color(0, 0, 0, 0));
 	m_FrontHandCircle.setPosition(m_AnchorPos);
 
-	m_BackHandCircle.setRadius(4.0f);
-	m_BackHandCircle.setOrigin(4.0f, 4.0f);
+	m_BackHandCircle.setRadius(DEFAULT_DEBUG_RADIUS);
+	m_BackHandCircle.setOrigin(DEFAULT_DEBUG_RADIUS, DEFAULT_DEBUG_RADIUS);
 	m_BackHandCircle.setFillColor(sf::Color::Magenta);
 	m_BackHandCircle.setOutlineColor(sf::Color(0, 0, 0, 0));
 	m_BackHandCircle.setPosition(m_AnchorPos);
@@ -161,15 +160,15 @@ void Weapon::Update(sf::Vector2f ControlPos, sf::Vector2f CharPos, bool Flip, bo
 	float adjacent = m_ControlCircle.getPosition().y - m_AnchorCircle.getPosition().y;
 
 	if(opposite > 0)
-		m_WeaponRect.setRotation((atan(adjacent / opposite)) * 180 / PI);
+		m_WeaponRect.setRotation((atan(adjacent / opposite)) * 180 / ut::PI);
 	else
-		m_WeaponRect.setRotation(((atan(adjacent / opposite)) * 180 / PI) + 180);
+		m_WeaponRect.setRotation(((atan(adjacent / opposite)) * 180 / ut::PI) + 180);
 
 	m_WeaponRect.setPosition(m_ControlCircle.getPosition().x, m_ControlCircle.getPosition().y);
 
 	m_HitCircle.setPosition( //Try to get otherHitBoxOffset working
-		(m_HitboxOffset.x * cos(m_WeaponRect.getRotation() / 180 * PI)) - (m_HitboxOffset.y * sin(m_WeaponRect.getRotation() / 180 * PI)) + m_WeaponRect.getPosition().x,
-		(m_HitboxOffset.x * sin(m_WeaponRect.getRotation() / 180 * PI)) + (m_HitboxOffset.y * cos(m_WeaponRect.getRotation() / 180 * PI)) + m_WeaponRect.getPosition().y
+		(m_HitboxOffset.x * cos(m_WeaponRect.getRotation() / 180 * ut::PI)) - (m_HitboxOffset.y * sin(m_WeaponRect.getRotation() / 180 * ut::PI)) + m_WeaponRect.getPosition().x,
+		(m_HitboxOffset.x * sin(m_WeaponRect.getRotation() / 180 * ut::PI)) + (m_HitboxOffset.y * cos(m_WeaponRect.getRotation() / 180 * ut::PI)) + m_WeaponRect.getPosition().y
 	);
 }
 

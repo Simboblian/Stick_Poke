@@ -4,11 +4,10 @@
 #include <SFML/Graphics.hpp>
 #include "GameObject.h"
 
-#define PI 3.14159f
 #define DEFAULT_RADIUS 50.0f
 #define DEFAULT_WEAPON_WIDTH 100.0f
 #define DEFAULT_WEAPON_HEIGHT 10.0f
-#define DEFAULT_DEBUG_RADIUS 4.0f
+#define DEFAULT_DEBUG_RADIUS 5.0f
 
 class Weapon : GameObject
 {
@@ -25,6 +24,8 @@ private:
 	sf::Vector2f m_BackHandPos;
 	sf::Vector2f m_ControlPos;
 	sf::Vector2f m_AnchorPos;
+
+	sf::Vector2f m_ControlPosOffset;
 	
 	sf::CircleShape m_Circle;
 	sf::CircleShape m_ControlCircle;
@@ -34,8 +35,10 @@ private:
 	sf::CircleShape m_HitCircle;
 
 	sf::RectangleShape m_WeaponRect;
+
 public:
 	sf::CircleShape GetHitCircle() {return m_HitCircle;};
+
 	void SetControlOffset(sf::Vector2f ControlOffset) { m_ControlOffset = ControlOffset;};
 	void SetControlRadius(float ControlRadius) { m_Circle.setRadius(ControlRadius); m_Circle.setOrigin(sf::Vector2f(ControlRadius, ControlRadius)); };
 	void SetAnchorOffset(sf::Vector2f AnchorOffset) { m_AnchorOffset = AnchorOffset; };
@@ -46,6 +49,7 @@ public:
 
 	sf::Vector2f GetFrontHandPos() { return m_FrontHandPos; };
 	sf::Vector2f GetBackHandPos() { return m_BackHandPos; };
+	sf::Vector2f GetStuff()	{ return m_ControlPos; };
 
 	Weapon();
 	Weapon(float radius, sf::Vector2f CirclePos, sf::Vector2f ControlOffset, sf::Vector2f AnchorPos, sf::Vector2f AnchorOffset, sf::Vector2f WeaponSize, sf::Vector2f WeaponOrigin, sf::Vector2f HitBoxOffset);

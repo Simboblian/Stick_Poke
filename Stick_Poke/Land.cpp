@@ -19,15 +19,18 @@ void Land::Draw(sf::RenderWindow &Window)
 
 void Land::Update(sf::Vector2f Gravity)
 {
+	m_Position = sf::Vector2f(Utility::B2VECtoSFVEC(m_Body->GetPosition(), true));
+
+	for (int i = 0; i < m_RectList.size(); i++)
+		m_RectList[i]->setPosition(sf::Vector2f(i * SIZE, 0) - m_Origin + m_Position);
 }
 
-Land::Land(sf::Vector2f Size)
+Land::Land(b2World &World, sf::Vector2f Size)
 {
 	m_GravityScale = 0;
 
 	m_Size = Size;
 	m_Origin = sf::Vector2f(Size.x / 2, Size.y / 2);
-	m_Position = sf::Vector2f(512, 706);
 	m_Center = sf::Vector2f(m_Position.x, m_Position.y / 2);
 
 	int capacity = ((int)m_Size.x - ((int)m_Size.x % SIZE)) / SIZE;
@@ -43,6 +46,11 @@ Land::Land(sf::Vector2f Size)
 			r->setFillColor(m_Color2);
 		m_RectList.push_back(r);
 	}
+
+	CreateSquareBody(World, m_Size);
+	m_Body->SetType(b2_staticBody);
+
+	SetPosition(sf::Vector2f(750, 100));
 }
 
 Land::Land()

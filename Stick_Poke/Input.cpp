@@ -1,40 +1,54 @@
 #include "Input.h"
 
-void Input::SetBindings(int Left, int Right, int Dash_left, int Dash_right, int Stance1, int Stance2, sf::Joystick::Axis LaX, sf::Joystick::Axis LaY, sf::Joystick::Axis RaX, sf::Joystick::Axis RaY)
+sf::Vector2f Input::MouseToJoystick(sf::RenderWindow & Window, sf::Vector2f ViewPosition)
 {
-	m_ButtonID = ButtonID(Left, Right, Dash_left, Dash_right, Stance1, Stance2, LaX, LaY, RaX, RaY);
+	sf::Vector2f result = Window.mapPixelToCoords(sf::Vector2i((sf::Mouse::getPosition().x - Window.getPosition().x) - ViewPosition.x, (sf::Mouse::getPosition().y - Window.getPosition().y) - ViewPosition.y));
+
+	result = Utility::Truncate(result, 100);
+
+	return result;
 }
 
-void Input::TakeInputs(int ControllerID)
+void Input::SetBindings(int Left, int Right, int Up, int Down, int Movement, int Stance1, int Stance2, sf::Joystick::Axis LX, sf::Joystick::Axis LY, sf::Joystick::Axis RX, sf::Joystick::Axis RY)
+{
+	m_ButtonID = ButtonID(Left, Right, Up, Down, Movement, Stance1, Stance2, LX, LY, RX, RY);
+}
+
+void Input::TakeInputs(sf::RenderWindow &Window, sf::Vector2f CameraPosition, int ControllerID)
 {
 	if (m_Device == Devices::Controller)
 	{
-		m_ControllerState.left = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.left);
-		m_ControllerState.right = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.right);
-		m_ControllerState.dash_left = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.dash_left);
-		m_ControllerState.dash_right = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.dash_right);
-		m_ControllerState.stance1 = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.stance1);
-		m_ControllerState.stance2 = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.stance2);
-		m_ControllerState.lStick = sf::Vector2f(sf::Joystick::getAxisPosition(ControllerID, m_ButtonID.l_axisX), sf::Joystick::getAxisPosition(ControllerID, m_ButtonID.l_axisY));
-		m_ControllerState.rStick = sf::Vector2f(sf::Joystick::getAxisPosition(ControllerID, m_ButtonID.r_axisX), sf::Joystick::getAxisPosition(ControllerID, m_ButtonID.r_axisY));
+		m_InputState.left = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.left);
+		m_InputState.right = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.right);
+		m_InputState.movement = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.movement);
+		m_InputState.stance1 = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.stance1);
+		m_InputState.stance2 = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.stance2);
+		m_InputState.lStick = sf::Vector2f(sf::Joystick::getAxisPosition(ControllerID, m_ButtonID.lAxisX), sf::Joystick::getAxisPosition(ControllerID, m_ButtonID.lAxisY));
+		m_InputState.rStick = sf::Vector2f(sf::Joystick::getAxisPosition(ControllerID, m_ButtonID.rAxisX), sf::Joystick::getAxisPosition(ControllerID, m_ButtonID.rAxisY));
 	}
 	else if (m_Device == MouseKeyboard)
 	{
-		//m_ControllerState.left = Keyboard::isKeyPressed(Keyboard::A);
-		//m_ControllerState.right = Keyboard::isKeyPressed(Keyboard::D);
-		//m_ControllerState.dash_left = Keyboard::isKeyPressed(Keyboard::Q);
-		//m_ControllerState.dash_right = Keyboard::isKeyPressed(Keyboard::E);
-		//etc....
+		m_InputState.rStick = MouseToJoystick(Window, CameraPosition);
+
+		m_InputState.left = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
+		m_InputState.right = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
+		m_InputState.up = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
+		m_InputState.down = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
+		m_InputState.movement = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
+		
+		//etc...
 	}
 }
 
-ControllerState Input::ReadInputs()
+ControlState Input::ReadInputs()
 {
-	return m_ControllerState;
+	return m_InputState;
 }
 
-void Input::Update()
+void Input::Update(sf::RenderWindow &Window)
 {
+	if(m_Device == MouseKeyboard)
+		sf::Mouse::setPosition(sf::Vector2i(Window.getPosition().x + (Window.getSize().x /2), Window.getPosition().y + (Window.getSize().y / 2)));
 }
 
 Input::Input()
