@@ -13,7 +13,7 @@
 
 #define FPS_DEFAULT 60.0f
 #define WORLDTIME 1/60.0f
-#define GRAVITY sf::Vector2f(0, 9.8f)
+#define GRAVITY sf::Vector2f(0, 98.0f)
 #define WINDOWSIZEX 1280
 #define WINDOWSIZEY 768
 

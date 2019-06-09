@@ -27,8 +27,8 @@ bool Engine::Init()
 
 	m_Window = new sf::RenderWindow(sf::VideoMode(WINDOWSIZEX, WINDOWSIZEY), "Stick Poke"/*, sf::Style::Fullscreen*/);
 	m_Window->setFramerateLimit(FPS_DEFAULT);
-	//m_Window->setMouseCursorGrabbed(true);
-	//m_Window->setMouseCursorVisible(false);
+	m_Window->setMouseCursorGrabbed(true);
+	m_Window->setMouseCursorVisible(false);
 
 	if (!m_Window)
 		passInit = false;
@@ -47,10 +47,11 @@ bool Engine::Init()
 
 	m_B2World->SetDebugDraw(m_DebugDraw);
 
-	m_CollisionHandler = new CollisionHandler;
+	m_ObjectManager = new ObjectManager();
+
+	m_CollisionHandler = new CollisionHandler(*m_ObjectManager);
 	m_B2World->SetContactListener(m_CollisionHandler);
 
-	m_ObjectManager = new ObjectManager();
 
 	//Create the world and add it's objects to the game;
 	m_World = new World(*m_B2World, sf::Vector2f(1600, 100));
@@ -85,8 +86,8 @@ void Engine::Update()
 {
 	m_B2World->Step(WORLDTIME, 8, 3);
 
-	m_ObjectManager->Update(GRAVITY);
 	m_Player->Update(*m_Window);
+	m_ObjectManager->Update(GRAVITY);
 }
 
 // Rendering the game to the screen

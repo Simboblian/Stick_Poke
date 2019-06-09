@@ -14,6 +14,8 @@ class Weapon : GameObject
 private:
 	bool flip;
 
+	b2Body *m_HitSensor;
+
 	sf::Vector2f m_ControlOffset;
 	sf::Vector2f m_AnchorOffset;
 	sf::Vector2f m_HitboxOffset;
@@ -46,18 +48,22 @@ public:
 	void SetHitboxRadius(float HitboxRadius) { m_HitCircle.setRadius(HitboxRadius); m_HitCircle.setOrigin(sf::Vector2f(HitboxRadius, HitboxRadius)); };
 	void SetWeaponSize(sf::Vector2f WeaponSize) { m_WeaponRect.setSize(WeaponSize); m_WeaponRect.setOrigin(WeaponSize.x / 2, WeaponSize.y / 2); };
 	void SetWeaponOrigin(sf::Vector2f WeaponOrigin) { m_WeaponRect.setOrigin(WeaponOrigin); };
+	void SetFrontHandOffset(float FrontHandOffset) { m_FrontHandOffset = FrontHandOffset; };
+	void SetBackHandOffset(float BackHandOffset) { m_BackHandOffset = BackHandOffset; };
+
 
 	sf::Vector2f GetFrontHandPos() { return m_FrontHandPos; };
 	sf::Vector2f GetBackHandPos() { return m_BackHandPos; };
-	sf::Vector2f GetStuff()	{ return m_ControlPos; };
+	sf::Vector2f GetWeaponOffset() { return m_ControlPos; };
 
 	Weapon();
-	Weapon(float radius, sf::Vector2f CirclePos, sf::Vector2f ControlOffset, sf::Vector2f AnchorPos, sf::Vector2f AnchorOffset, sf::Vector2f WeaponSize, sf::Vector2f WeaponOrigin, sf::Vector2f HitBoxOffset);
+	Weapon(b2World &World);
+	Weapon(b2World &World, float radius, sf::Vector2f CirclePos, sf::Vector2f ControlOffset, sf::Vector2f AnchorPos, sf::Vector2f AnchorOffset, sf::Vector2f WeaponSize, sf::Vector2f WeaponOrigin, sf::Vector2f HitBoxOffset);
 	~Weapon();
 
 	//b2Vec2 GetForce() { return b2Vec2(m_Body->GetLinearVelocity().x *  m_Body->GetMass(), m_Body->GetLinearVelocity().y *  m_Body->GetMass()); };
 
-	void Update(sf::Vector2f ControlPos, sf::Vector2f CharPos, bool Flip, bool AllowFlip);
+	void Update(sf::Vector2f ControlPos, sf::Vector2f CharPos, sf::Vector2f CharSize, bool Flip, bool AllowFlip);
 	void Draw(sf::RenderWindow &Window, bool hitDebug);
 };
 

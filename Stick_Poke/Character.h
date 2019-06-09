@@ -9,9 +9,25 @@
 
 #define ARMSECTIONLENGTH 40
 
+enum MoveState
+{
+	MS_IDLE,
+	MS_WALKLEFT,
+	MS_WALKRIGHT,
+	MS_RUNLEFT,
+	MS_RUNRIGHT,
+	MS_DASHLEFT,
+	MS_DASHRIGHT,
+	MS_JUMPLEFT,
+	MS_JUMPRIGHT,
+	MS_JUMPUP
+};
+
 class Character : public GameObject
 {
 private:
+	MoveState m_MoveState = MS_IDLE;
+
 	sf::RectangleShape m_Rect;
 
 	sf::RectangleShape m_BackBicep;
@@ -22,7 +38,6 @@ private:
 	sf::CircleShape m_FrontElbowCircle;
 	sf::RectangleShape m_FrontForearm;
 
-
 	sf::VertexArray m_BackArm;
 	sf::VertexArray m_FrontArm;
 	sf::Vector2f m_Velocity;
@@ -31,8 +46,6 @@ private:
 	sf::Vector2f m_BackElbow;
 	sf::Vector2f m_FrontShoulder;
 	sf::Vector2f m_FrontElbow;
-
-
 
 	float deg = 90;
 
@@ -45,8 +58,8 @@ public:
 
 	void SetState(state State) { m_State = State; };
 	sf::RectangleShape GetShape() { return m_Rect; };
-	sf::Vector2f GetWeaponStuff() { return m_Weapon->GetStuff(); };
-	void ReceiveInputs(ControlState State);
+	sf::Vector2f GetWeaponOffset() { return m_Weapon->GetWeaponOffset(); };
+	void ReceiveInputs(Input* State);
 
 	Character(b2World &World);
 	Character();

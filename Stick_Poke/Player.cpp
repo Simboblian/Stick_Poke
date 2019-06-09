@@ -4,18 +4,19 @@ void Player::Initialize()
 {
 }
 
+void Player::ProcessInputs(sf::RenderWindow &Window)
+{
+	m_Input->TakeInputs(Window, m_Character.GetPosition(), 0);
+	m_Character.ReceiveInputs(m_Input);
+}
+
 void Player::Update(sf::RenderWindow &Window)
 {
 	m_Camera->SetPosition(m_Character.GetPosition());
 	m_Camera->Update(Window);
-	m_Input->Update(Window);
+	m_Input->Update(Window, m_Character.GetPosition(), m_Camera->GetCamera().getCenter());
 }
 
-void Player::ProcessInputs(sf::RenderWindow &Window)
-{
-	m_Input->TakeInputs(Window, m_Character.GetPosition(), 0);
-	m_Character.ReceiveInputs(m_Input->GetInputs());
-}
 
 Player::Player(Character & Char, sf::Vector2f CameraSize) : m_Character(Char)
 {

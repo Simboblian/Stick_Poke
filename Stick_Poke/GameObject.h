@@ -9,21 +9,20 @@ enum state { IDLE, HIT, STANDING, AIRBORNE };
 
 class GameObject
 {
+private:
+	virtual void CreateRoundedFixture(sf::Vector2f Size);
+	virtual void CreateSquareFixture(sf::Vector2f Size);
+	virtual void CreateCircleFixture(float Radius);
 protected:
 	state m_State;
 
 	b2Body *m_Body;
 
-	float m_GravityScale;
-
 	sf::Vector2f m_Position;
 
-	virtual void CreateRoundedBody(b2World &World, sf::Vector2f Size);
-	virtual void CreateSquareBody(b2World &World, sf::Vector2f Size);
-	virtual void CreateCircularBody(b2World &World, float Radius);
-	virtual void CreateRoundedFixture(sf::Vector2f Size);
-	virtual void CreateSquareFixture(sf::Vector2f Size);
-	virtual void CreateCircleFixture(float Radius);
+	virtual void InitRoundedBody(b2World &World, sf::Vector2f Size);
+	virtual void InitSquareBody(b2World &World, sf::Vector2f Size);
+	virtual void InitCircularBody(b2World &World, float Radius);
 public:
 	//- OBJECT BASICS -//
 	virtual void Draw(sf::RenderWindow &Window);
@@ -35,7 +34,6 @@ public:
 	virtual void SetPosition(b2Vec2 Position) { m_Position = Utility::B2VECtoSFVEC(Position, true); m_Body->SetTransform(Position, 0); };
 	//----- GETS -----//
 	virtual sf::Vector2f GetPosition() { return Utility::B2VECtoSFVEC(m_Body->GetPosition(), true); };
-	virtual float GetGravityScale() { return m_GravityScale; };
 	virtual sf::RectangleShape GetShape() { return sf::RectangleShape(); };
 	virtual b2Body* GetBody() { return m_Body; };
 	//- CONSTRUCTORS -//

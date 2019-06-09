@@ -1,6 +1,6 @@
 #include "GameObject.h"
 
-void GameObject::CreateRoundedBody(b2World & World, sf::Vector2f Size)
+void GameObject::InitRoundedBody(b2World & World, sf::Vector2f Size)
 {
 	b2BodyDef _bodyDef;
 	_bodyDef.type = b2_dynamicBody;
@@ -10,7 +10,7 @@ void GameObject::CreateRoundedBody(b2World & World, sf::Vector2f Size)
 	CreateRoundedFixture(Size);
 }
 
-void GameObject::CreateSquareBody(b2World & World, sf::Vector2f Size)
+void GameObject::InitSquareBody(b2World & World, sf::Vector2f Size)
 {
 	b2BodyDef _bodyDef;
 	_bodyDef.type = b2_dynamicBody;
@@ -20,7 +20,7 @@ void GameObject::CreateSquareBody(b2World & World, sf::Vector2f Size)
 	CreateSquareFixture(Size);
 }
 
-void GameObject::CreateCircularBody(b2World & World, float Radius)
+void GameObject::InitCircularBody(b2World & World, float Radius)
 {
 	b2BodyDef _bodyDef;
 	_bodyDef.type = b2_dynamicBody;

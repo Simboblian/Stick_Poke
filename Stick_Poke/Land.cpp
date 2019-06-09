@@ -27,8 +27,6 @@ void Land::Update(sf::Vector2f Gravity)
 
 Land::Land(b2World &World, sf::Vector2f Size)
 {
-	m_GravityScale = 0;
-
 	m_Size = Size;
 	m_Origin = sf::Vector2f(Size.x / 2, Size.y / 2);
 	m_Center = sf::Vector2f(m_Position.x, m_Position.y / 2);
@@ -46,8 +44,8 @@ Land::Land(b2World &World, sf::Vector2f Size)
 			r->setFillColor(m_Color2);
 		m_RectList.push_back(r);
 	}
-
-	CreateSquareBody(World, m_Size);
+	
+	InitSquareBody(World, m_Size);
 	m_Body->SetType(b2_staticBody);
 
 	SetPosition(sf::Vector2f(750, 100));

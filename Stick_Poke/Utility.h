@@ -39,6 +39,16 @@ public:
 		return v;
 	}
 
+	static sf::Vector2f MidPointOfTwoVectors(sf::Vector2f firstPoint, sf::Vector2f secondPoint)
+	{
+		return sf::Vector2f((firstPoint.x + secondPoint.x) / 2, (firstPoint.y + secondPoint.y) / 2);
+	}
+
+	static float AngleBetweenTwoVectors(sf::Vector2f firstPoint, sf::Vector2f secondPoint)
+	{
+		return atan((secondPoint.y - firstPoint.y) / (secondPoint.x - firstPoint.x));
+	}
+
 	static float DEGTORAD(float degrees) { return (degrees * ut::PI) / 180; };
 	static float RADTODEG(float radians) { return (radians * 180) / ut::PI; };
 
