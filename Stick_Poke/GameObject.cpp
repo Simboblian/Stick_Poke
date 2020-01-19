@@ -5,7 +5,6 @@ void GameObject::InitRoundedBody(b2World & World, sf::Vector2f Size)
 	b2BodyDef _bodyDef;
 	_bodyDef.type = b2_dynamicBody;
 	_bodyDef.position.Set(0, 0);
-	_bodyDef.fixedRotation = true;
 	m_Body = World.CreateBody(&_bodyDef);
 	CreateRoundedFixture(Size);
 }
@@ -15,7 +14,6 @@ void GameObject::InitSquareBody(b2World & World, sf::Vector2f Size)
 	b2BodyDef _bodyDef;
 	_bodyDef.type = b2_dynamicBody;
 	_bodyDef.position.Set(0, 0);
-	_bodyDef.fixedRotation = true;
 	m_Body = World.CreateBody(&_bodyDef);
 	CreateSquareFixture(Size);
 }
@@ -87,10 +85,6 @@ void GameObject::Draw(sf::RenderWindow & Window)
 }
 
 void GameObject::Update()
-{
-}
-
-void GameObject::Update(sf::Vector2f Gravity)
 {
 }
 

@@ -33,7 +33,6 @@ bool Engine::Init()
 	if (!m_Window)
 		passInit = false;
 
-
 	m_B2World = new b2World(Utility::SFVECtoB2VEC(GRAVITY, false));
 
 	m_DebugDraw = new SFMLDebugDraw(*m_Window);
@@ -54,13 +53,15 @@ bool Engine::Init()
 
 
 	//Create the world and add it's objects to the game;
-	m_World = new World(*m_B2World, sf::Vector2f(1600, 100));
+	m_World = new World(*m_B2World, sf::Vector2f(6400, 100));
 	for (int i = 0; i < m_World->GetLandList().size(); i++)
 		m_ObjectManager->AddObject(m_World->GetLandList()[i]);
 
 	//Create the character and add it's objects to the game;
 	m_Character = new Character(*m_B2World);
 	m_ObjectManager->AddObject(m_Character);
+	m_ObjectManager->AddObject(m_Character->GetWeapon());
+	m_ObjectManager->AddObject(new WorldObject(*m_B2World, sf::Vector2f(50, 50), sf::Vector2f(500, 0)));
 
 	m_Player = new Player(*m_Character, sf::Vector2f(WINDOWSIZEX, WINDOWSIZEY));
 	
@@ -87,7 +88,7 @@ void Engine::Update()
 	m_B2World->Step(WORLDTIME, 8, 3);
 
 	m_Player->Update(*m_Window);
-	m_ObjectManager->Update(GRAVITY);
+	m_ObjectManager->Update();
 }
 
 // Rendering the game to the screen

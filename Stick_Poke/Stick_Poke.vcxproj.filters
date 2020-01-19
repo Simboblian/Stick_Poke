@@ -37,6 +37,12 @@
     <Filter Include="Source Files\Player">
       <UniqueIdentifier>{3e687a3e-8132-4b0e-84d2-1b86a3baf95d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{e33d96bb-4499-4d19-9d40-ef615b1c3fab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UIObject">
+      <UniqueIdentifier>{f87431d7-c3fd-4189-8df9-8791a7f01579}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -78,6 +84,15 @@
     <ClCompile Include="SFMLDebugDraw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UIObject.cpp">
+      <Filter>Source Files\UIObject</Filter>
+    </ClCompile>
+    <ClCompile Include="UIProgressBar.cpp">
+      <Filter>Source Files\UIObject</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldObject.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -118,6 +133,15 @@
     </ClInclude>
     <ClInclude Include="SFMLDebugDraw.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIObject.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIProgressBar.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldObject.h">
+      <Filter>Header Files\Objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

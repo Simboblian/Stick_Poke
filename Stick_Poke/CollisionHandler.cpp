@@ -15,7 +15,6 @@ void CollisionHandler::BeginContact(b2Contact * contact)
 		}
 	}
 
-
 	for (int i = 0; i < m_CollisionList.size(); i++)
 	{
 		if (m_CollisionList[i] == collision)
@@ -31,26 +30,45 @@ void CollisionHandler::BeginContact(b2Contact * contact)
 	}
 
 	m_CollisionList.push_back(collision);
-
-	for (int i = 0; i < m_CollisionList.size(); i++)
+	
+	if (m_CollisionList.back().first.second->GetBody()->GetUserData() == (void*)ut::b_Character)
 	{
-		if (m_CollisionList[i].first.first == m_ObjectManager.GetObjects()[1])
-		{
-			if (m_CollisionList[i].first.second->IsSensor())
+		if (m_CollisionList.back().first.second->GetUserData() == (void*)ut::f_Foot)
+			if (m_CollisionList.back().second.second->GetUserData() == (void*)ut::f_Floor)
 			{
-				m_ObjectManager.GetObjects()[1]->SetState(STANDING);
-				continue;
+				m_CollisionList.back().first.first->SetState(STANDING);
+				return;
 			}
-		}
+	}
+	else if (m_CollisionList.back().first.second->GetBody()->GetUserData() == (void*)ut::b_Weapon)
+	{
+		if (m_CollisionList.back().first.second->GetUserData() == (void*)ut::f_Hitbox)
+			if (m_CollisionList.back().second.second->GetBody()->GetUserData() == (void*)ut::b_Doodad)
+				if (m_CollisionList.back().second.second->GetUserData() == (void*)ut::f_Hurtbox)
+				{
+					m_CollisionList.back().second.second->GetBody()->ApplyLinearImpulse(Utility::SFVECtoB2VEC(m_CollisionList.back().first.first->GetHitVector(), true), m_CollisionList.back().second.second->GetBody()->GetWorldCenter(), true);
+					return;
+				}
+	}
 
-		if (m_CollisionList[i].second.first == m_ObjectManager.GetObjects()[1])
-		{
-			if (m_CollisionList[i].second.second->IsSensor())
+	if (m_CollisionList.back().second.second->GetBody()->GetUserData() == (void*)ut::b_Character)
+	{
+		if (m_CollisionList.back().second.second->GetUserData() == (void*)ut::f_Foot)
+			if (m_CollisionList.back().first.second->GetUserData() == (void*)ut::f_Floor)
 			{
-				m_ObjectManager.GetObjects()[1]->SetState(STANDING);
-				continue;
+				m_CollisionList.back().second.first->SetState(STANDING);
+				return;
 			}
-		}
+	}
+	else if (m_CollisionList.back().second.second->GetBody()->GetUserData() == (void*)ut::b_Weapon)
+	{
+		if (m_CollisionList.back().second.second->GetUserData() == (void*)ut::f_Hitbox)
+			if (m_CollisionList.back().first.second->GetBody()->GetUserData() == (void*)ut::b_Doodad)
+				if (m_CollisionList.back().first.second->GetUserData() == (void*)ut::f_Hurtbox)
+				{
+					m_CollisionList.back().first.second->GetBody()->ApplyLinearImpulse(Utility::SFVECtoB2VEC(m_CollisionList.back().second.first->GetHitVector(), true), m_CollisionList.back().first.second->GetBody()->GetWorldCenter(), true);
+					return;
+				}
 	}
 }
 
@@ -69,50 +87,28 @@ void CollisionHandler::EndContact(b2Contact * contact)
 		}
 	}
 
+
 	for (int i = 0; i < m_CollisionList.size(); i++)
 	{
 		if (m_CollisionList[i] == collision)
 		{
-			if (m_CollisionList[i].first.first == m_ObjectManager.GetObjects()[1])
+
+			if (m_CollisionList[i].first.second->GetBody()->GetUserData() == (void*)ut::b_Character)
 			{
-				if (m_CollisionList[i].first.second->IsSensor())
-				{
-					m_ObjectManager.GetObjects()[1]->SetState(AIRBORNE);
-					continue;
-				}
+				if (m_CollisionList[i].first.second->GetUserData() == (void*)ut::f_Foot)
+					if (m_CollisionList[i].second.second->GetUserData() == (void*)ut::f_Floor)
+					{
+						m_CollisionList[i].first.first->SetState(AIRBORNE);
+					}
 			}
 
-			if (m_CollisionList[i].second.first == m_ObjectManager.GetObjects()[1])
+			if (m_CollisionList[i].second.second->GetBody()->GetUserData() == (void*)ut::b_Character)
 			{
-				if (m_CollisionList[i].second.second->IsSensor())
-				{
-					m_ObjectManager.GetObjects()[1]->SetState(AIRBORNE);
-					continue;
-				}
-			}
-			m_CollisionList.erase(m_CollisionList.begin() + i);
-			continue;
-		}
-		else if (m_CollisionList[i] == std::pair<std::pair<GameObject*, b2Fixture*>, std::pair<GameObject*, b2Fixture*>>
-			(std::pair<GameObject*, b2Fixture*>(collision.second.first, collision.second.second),
-				std::pair<GameObject*, b2Fixture*>(collision.first.first, collision.first.second)))
-		{
-			if (m_CollisionList[i].first.first == m_ObjectManager.GetObjects()[1])
-			{
-				if (m_CollisionList[i].first.second->IsSensor())
-				{
-					m_ObjectManager.GetObjects()[1]->SetState(AIRBORNE);
-					continue;
-				}
-			}
-
-			if (m_CollisionList[i].second.first == m_ObjectManager.GetObjects()[1])
-			{
-				if (m_CollisionList[i].second.second->IsSensor())
-				{
-					m_ObjectManager.GetObjects()[1]->SetState(AIRBORNE);
-					continue;
-				}
+				if (m_CollisionList[i].second.second->GetUserData() == (void*)ut::f_Foot)
+					if (m_CollisionList[i].first.second->GetUserData() == (void*)ut::f_Floor)
+					{
+						m_CollisionList[i].second.first->SetState(AIRBORNE);
+					}
 			}
 
 			m_CollisionList.erase(m_CollisionList.begin() + i);

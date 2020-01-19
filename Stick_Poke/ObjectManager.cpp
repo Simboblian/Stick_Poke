@@ -1,10 +1,10 @@
 #include "ObjectManager.h"
 
-void ObjectManager::Update(sf::Vector2f Gravity)
+void ObjectManager::Update()
 {
 	for (int i = 0; i < m_Objects.size(); i++)
 	{
-		m_Objects[i]->Update(Gravity);
+		m_Objects[i]->Update();
 	}
 }
 

@@ -22,7 +22,7 @@ public:
 	sf::RectangleShape GetShape();
 
 	void Draw(sf::RenderWindow &Window);
-	void Update(sf::Vector2f Gravity);
+	void Update();
 
 	Land(b2World &World, sf::Vector2f Size);
 	Land();

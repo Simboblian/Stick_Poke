@@ -17,7 +17,7 @@ void Land::Draw(sf::RenderWindow &Window)
 		Window.draw(*m_RectList[i], sf::RenderStates::Default);
 }
 
-void Land::Update(sf::Vector2f Gravity)
+void Land::Update()
 {
 	m_Position = sf::Vector2f(Utility::B2VECtoSFVEC(m_Body->GetPosition(), true));
 
@@ -47,6 +47,8 @@ Land::Land(b2World &World, sf::Vector2f Size)
 	
 	InitSquareBody(World, m_Size);
 	m_Body->SetType(b2_staticBody);
+	m_Body->SetUserData((void*)ut::b_Land);
+	m_Body->GetFixtureList()->SetUserData((void*)ut::f_Floor);
 
 	SetPosition(sf::Vector2f(750, 100));
 }

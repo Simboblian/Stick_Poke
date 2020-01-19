@@ -9,9 +9,9 @@ sf::Vector2f Input::MouseToJoystick(sf::RenderWindow & Window, sf::Vector2f Char
 	return result;
 }
 
-void Input::SetBindings(int Left, int Right, int Up, int Down, int Movement, int Stance1, int Stance2, sf::Joystick::Axis LX, sf::Joystick::Axis LY, sf::Joystick::Axis RX, sf::Joystick::Axis RY)
+void Input::SetBindings(int Left, int Right, int Up, int Down, int Movement, int Item1, int Item2, int Item3, int Item4, int Stance1, int Stance2, sf::Joystick::Axis LX, sf::Joystick::Axis LY, sf::Joystick::Axis RX, sf::Joystick::Axis RY)
 {
-	m_ButtonID = ButtonID(Left, Right, Up, Down, Movement, Stance1, Stance2, LX, LY, RX, RY);
+	m_ButtonID = ButtonID(Left, Right, Up, Down, Movement, Item1, Item2, Item3, Item4, Stance1, Stance2, LX, LY, RX, RY);
 }
 
 void Input::TakeInputs(sf::RenderWindow &Window, sf::Vector2f CharacterPosition, int ControllerID)
@@ -25,6 +25,10 @@ void Input::TakeInputs(sf::RenderWindow &Window, sf::Vector2f CharacterPosition,
 		m_NewState->up = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.up);
 		m_NewState->down = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.down);
 		m_NewState->movement = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.movement);
+		m_NewState->item1 = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.item1);
+		m_NewState->item2 = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.item2);
+		m_NewState->item3 = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.item3);
+		m_NewState->item4 = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.item4);
 		m_NewState->stance1 = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.stance1);
 		m_NewState->stance2 = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.stance2);
 		m_NewState->lStick = sf::Vector2f(sf::Joystick::getAxisPosition(ControllerID, m_ButtonID.lAxisX), sf::Joystick::getAxisPosition(ControllerID, m_ButtonID.lAxisY));
@@ -39,6 +43,12 @@ void Input::TakeInputs(sf::RenderWindow &Window, sf::Vector2f CharacterPosition,
 		m_NewState->up = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
 		m_NewState->down = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
 		m_NewState->movement = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
+		m_NewState->item1 = sf::Keyboard::isKeyPressed(sf::Keyboard::Q);
+		m_NewState->item2 = sf::Keyboard::isKeyPressed(sf::Keyboard::E);
+		m_NewState->item3 = sf::Keyboard::isKeyPressed(sf::Keyboard::R);
+		m_NewState->item4 = sf::Keyboard::isKeyPressed(sf::Keyboard::F);
+		m_NewState->stance1 = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+		m_NewState->stance2 = sf::Mouse::isButtonPressed(sf::Mouse::Right);
 		
 		//etc...
 	}

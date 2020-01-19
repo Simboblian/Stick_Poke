@@ -10,6 +10,7 @@
 #include "ObjectManager.h"
 #include "Utility.h"
 #include "CollisionHandler.h"
+#include "WorldObject.h"
 
 #define FPS_DEFAULT 60.0f
 #define WORLDTIME 1/60.0f

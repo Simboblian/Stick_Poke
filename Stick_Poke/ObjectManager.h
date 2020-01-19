@@ -15,7 +15,7 @@ private:
 	std::vector<GameObject*> m_DyingObjects;
 
 public:
-	void Update(sf::Vector2f Gravity);
+	void Update();
 	void Draw(sf::RenderWindow &Window);
 
 	void AddObject(GameObject* Object) { m_Objects.push_back(Object); };

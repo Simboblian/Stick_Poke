@@ -22,14 +22,14 @@ Player::Player(Character & Char, sf::Vector2f CameraSize) : m_Character(Char)
 {
 	m_Camera = new Camera(CameraSize);
 	m_Input = new Input();
-	m_Input->SetBindings(4, 5, 6, 7, 3, 8, 9, sf::Joystick::Axis::X, sf::Joystick::Axis::Y, sf::Joystick::Axis::U, sf::Joystick::Axis::V); //These values are just whatevs atm.
+	m_Input->SetBindings(4, 5, 6, 7, 3, 0, 1, 2, 10, 8, 9, sf::Joystick::Axis::X, sf::Joystick::Axis::Y, sf::Joystick::Axis::U, sf::Joystick::Axis::V); //These values are just whatevs atm.
 }
 
 Player::Player() : m_Character(Character())
 {
 	m_Input = new Input();
 	m_Camera = new Camera(sf::Vector2f(0, 0));
-	m_Input->SetBindings(4, 5, 6, 7, 3, 8, 9, sf::Joystick::Axis::X, sf::Joystick::Axis::Y, sf::Joystick::Axis::U, sf::Joystick::Axis::V); //These values are just whatevs atm.
+	m_Input->SetBindings(4, 5, 6, 7, 3, 0, 1, 2, 10, 8, 9, sf::Joystick::Axis::X, sf::Joystick::Axis::Y, sf::Joystick::Axis::U, sf::Joystick::Axis::V); //These values are just whatevs atm.
 }
 
 Player::~Player()
