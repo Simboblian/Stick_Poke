@@ -365,9 +365,6 @@ void Weapon::Update(sf::Vector2f ControlPos, sf::Vector2f CharPos, sf::Vector2f 
 	m_Body->SetTransform(Utility::SFVECtoB2VEC(m_HitCircle.getPosition(), true), 0);
 
 	m_OldCharPos = CharPos;
-	
-	system("CLS");
-	std::cout << GetHitVector().x << std::endl << GetHitVector().y << std::endl;
 }
 
 
