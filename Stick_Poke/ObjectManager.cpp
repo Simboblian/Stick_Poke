@@ -1,32 +1,32 @@
 #include "ObjectManager.h"
 
-void ObjectManager::Update()
+void ObjectManager::Update(float Delta)
 {
-	for (int i = 0; i < m_Objects.size(); i++)
+	for (int i = 0; i < _objects.size(); i++)
 	{
-		m_Objects[i]->Update();
+		_objects[i]->Update(Delta);
 	}
 }
 
 void ObjectManager::Draw(sf::RenderWindow & Window)
 {
-	for (int i = 0; i < m_Objects.size(); i++)
+	for (int i = 0; i < _objects.size(); i++)
 	{
-		m_Objects[i]->Draw(Window);
+		_objects[i]->Draw(Window);
 	}
 }
 
 void ObjectManager::PopulateDead(std::vector<GameObject*>& Vector)
 {
-	for (int i = 0; i < m_Objects.size(); i++)
+	for (int i = 0; i < _objects.size(); i++)
 	{
-		if (m_Objects[i] /*is killed*/)
+		if (_objects[i] /*is killed*/)
 		{
-			Vector.push_back(m_Objects[i]);
-			delete m_Objects[i];
-			m_Objects.erase(m_Objects.begin() + i);
+			Vector.push_back(_objects[i]);
+			delete _objects[i];
+			_objects.erase(_objects.begin() + i);
 
-			if (m_Objects.size() == 0)
+			if (_objects.size() == 0)
 				break;
 		}
 	}
@@ -34,15 +34,15 @@ void ObjectManager::PopulateDead(std::vector<GameObject*>& Vector)
 
 void ObjectManager::KillDying(std::vector<GameObject*>& Vector)
 {
-	for (int i = 0; i < m_Objects.size(); i++)
+	for (int i = 0; i < _objects.size(); i++)
 	{
-		if (m_Objects[i] /*is dying*/)
+		if (_objects[i] /*is dying*/)
 		{
-			Vector.push_back(m_Objects[i]);
-			delete m_Objects[i];
-			m_Objects.erase(m_Objects.begin() + i);
+			Vector.push_back(_objects[i]);
+			delete _objects[i];
+			_objects.erase(_objects.begin() + i);
 
-			if (m_Objects.size() == 0)
+			if (_objects.size() == 0)
 				break;
 		}
 	}
@@ -50,20 +50,20 @@ void ObjectManager::KillDying(std::vector<GameObject*>& Vector)
 
 void ObjectManager::KillAll(std::vector<GameObject*>& Vector)
 {
-	int j = m_Objects.size();
+	int j = _objects.size();
 	for (int i = 0; i < j; i++)
 	{
-		delete m_Objects[0];
-		m_Objects.erase(m_Objects.begin() );
+		delete _objects[0];
+		_objects.erase(_objects.begin() );
 
-		if (m_Objects.size() == 0)
+		if (_objects.size() == 0)
 			break;
 	}
 }
 
 ObjectManager::ObjectManager()
 {
-	m_Objects.clear();
+	_objects.clear();
 }
 
 

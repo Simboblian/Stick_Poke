@@ -5,7 +5,7 @@ void GameObject::InitRoundedBody(b2World & World, sf::Vector2f Size)
 	b2BodyDef _bodyDef;
 	_bodyDef.type = b2_dynamicBody;
 	_bodyDef.position.Set(0, 0);
-	m_Body = World.CreateBody(&_bodyDef);
+	_body = World.CreateBody(&_bodyDef);
 	CreateRoundedFixture(Size);
 }
 
@@ -14,7 +14,7 @@ void GameObject::InitSquareBody(b2World & World, sf::Vector2f Size)
 	b2BodyDef _bodyDef;
 	_bodyDef.type = b2_dynamicBody;
 	_bodyDef.position.Set(0, 0);
-	m_Body = World.CreateBody(&_bodyDef);
+	_body = World.CreateBody(&_bodyDef);
 	CreateSquareFixture(Size);
 }
 
@@ -23,7 +23,7 @@ void GameObject::InitCircularBody(b2World & World, float Radius)
 	b2BodyDef _bodyDef;
 	_bodyDef.type = b2_dynamicBody;
 	_bodyDef.position.Set(0, 0);
-	m_Body = World.CreateBody(&_bodyDef);
+	_body = World.CreateBody(&_bodyDef);
 	CreateCircleFixture(Radius);
 }
 
@@ -50,7 +50,7 @@ void GameObject::CreateRoundedFixture(sf::Vector2f Size)
 	_fixtureDef.shape = &_shape;
 	_fixtureDef.density = 1.0f;
 	_fixtureDef.friction = 0.1f;
-	m_Body->CreateFixture(&_fixtureDef);
+	_body->CreateFixture(&_fixtureDef);
 }
 
 void GameObject::CreateSquareFixture(sf::Vector2f Size)
@@ -65,7 +65,7 @@ void GameObject::CreateSquareFixture(sf::Vector2f Size)
 	_fixtureDef.shape = &_shape;
 	_fixtureDef.density = 1.0f;
 	_fixtureDef.friction = 0.1f;
-	m_Body->CreateFixture(&_fixtureDef);
+	_body->CreateFixture(&_fixtureDef);
 }
 
 void GameObject::CreateCircleFixture(float Radius)
@@ -77,14 +77,14 @@ void GameObject::CreateCircleFixture(float Radius)
 	_fixtureDef.shape = &_shape;
 	_fixtureDef.density = 1.0f;
 	_fixtureDef.friction = 0.1f;
-	m_Body->CreateFixture(&_fixtureDef);
+	_body->CreateFixture(&_fixtureDef);
 }
 
 void GameObject::Draw(sf::RenderWindow & Window)
 {
 }
 
-void GameObject::Update()
+void GameObject::Update(float Delta)
 {
 }
 

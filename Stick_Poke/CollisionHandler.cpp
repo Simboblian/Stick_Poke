@@ -4,24 +4,24 @@ void CollisionHandler::BeginContact(b2Contact * contact)
 {
 	std::pair<std::pair<GameObject*, b2Fixture*>, std::pair<GameObject*, b2Fixture*>> collision;
 
-	for (int i = 0; i < m_ObjectManager.GetObjects().size(); i++)
+	for (int i = 0; i < _objectManager.GetObjects().size(); i++)
 	{
-		for (b2Fixture* f = m_ObjectManager.GetObjects()[i]->GetBody()->GetFixtureList(); f; f = f->GetNext())
+		for (b2Fixture* f = _objectManager.GetObjects()[i]->GetBody()->GetFixtureList(); f; f = f->GetNext())
 		{
 			if (contact->GetFixtureA() == f)
-				collision.first = std::pair<GameObject*, b2Fixture*>(m_ObjectManager.GetObjects()[i], f);
+				collision.first = std::pair<GameObject*, b2Fixture*>(_objectManager.GetObjects()[i], f);
 			if (contact->GetFixtureB() == f)
-				collision.second = std::pair<GameObject*, b2Fixture*>(m_ObjectManager.GetObjects()[i], f);
+				collision.second = std::pair<GameObject*, b2Fixture*>(_objectManager.GetObjects()[i], f);
 		}
 	}
 
-	for (int i = 0; i < m_CollisionList.size(); i++)
+	for (int i = 0; i < _collisionList.size(); i++)
 	{
-		if (m_CollisionList[i] == collision)
+		if (_collisionList[i] == collision)
 		{
 			return;
 		}
-		else if (m_CollisionList[i] == std::pair<std::pair<GameObject*, b2Fixture*>, std::pair<GameObject*, b2Fixture*>>
+		else if (_collisionList[i] == std::pair<std::pair<GameObject*, b2Fixture*>, std::pair<GameObject*, b2Fixture*>>
 			(std::pair<GameObject*, b2Fixture*>(collision.second.first, collision.second.second),
 				std::pair<GameObject*, b2Fixture*>(collision.first.first, collision.first.second)))
 		{
@@ -29,44 +29,44 @@ void CollisionHandler::BeginContact(b2Contact * contact)
 		}
 	}
 
-	m_CollisionList.push_back(collision);
+	_collisionList.push_back(collision);
 	
-	if (m_CollisionList.back().first.second->GetBody()->GetUserData() == (void*)ut::b_Character)
+	if (_collisionList.back().first.second->GetBody()->GetUserData() == (void*)ut::b_Character)
 	{
-		if (m_CollisionList.back().first.second->GetUserData() == (void*)ut::f_Foot)
-			if (m_CollisionList.back().second.second->GetUserData() == (void*)ut::f_Floor)
+		if (_collisionList.back().first.second->GetUserData() == (void*)ut::f_Foot)
+			if (_collisionList.back().second.second->GetUserData() == (void*)ut::f_Floor)
 			{
-				m_CollisionList.back().first.first->SetState(STANDING);
+				_collisionList.back().first.first->SetState(STANDING);
 				return;
 			}
 	}
-	else if (m_CollisionList.back().first.second->GetBody()->GetUserData() == (void*)ut::b_Weapon)
+	else if (_collisionList.back().first.second->GetBody()->GetUserData() == (void*)ut::b_Weapon)
 	{
-		if (m_CollisionList.back().first.second->GetUserData() == (void*)ut::f_Hitbox)
-			if (m_CollisionList.back().second.second->GetBody()->GetUserData() == (void*)ut::b_Doodad)
-				if (m_CollisionList.back().second.second->GetUserData() == (void*)ut::f_Hurtbox)
+		if (_collisionList.back().first.second->GetUserData() == (void*)ut::f_Hitbox)
+			if (_collisionList.back().second.second->GetBody()->GetUserData() == (void*)ut::b_Doodad)
+				if (_collisionList.back().second.second->GetUserData() == (void*)ut::f_Hurtbox)
 				{
-					m_CollisionList.back().second.second->GetBody()->ApplyLinearImpulse(Utility::SFVECtoB2VEC(m_CollisionList.back().first.first->GetHitVector(), true), m_CollisionList.back().second.second->GetBody()->GetWorldCenter(), true);
+					_collisionList.back().second.second->GetBody()->ApplyLinearImpulse(Utility::SFVECtoB2VEC(_collisionList.back().first.first->GetHitVector(), true), _collisionList.back().second.second->GetBody()->GetWorldCenter(), true);
 					return;
 				}
 	}
 
-	if (m_CollisionList.back().second.second->GetBody()->GetUserData() == (void*)ut::b_Character)
+	if (_collisionList.back().second.second->GetBody()->GetUserData() == (void*)ut::b_Character)
 	{
-		if (m_CollisionList.back().second.second->GetUserData() == (void*)ut::f_Foot)
-			if (m_CollisionList.back().first.second->GetUserData() == (void*)ut::f_Floor)
+		if (_collisionList.back().second.second->GetUserData() == (void*)ut::f_Foot)
+			if (_collisionList.back().first.second->GetUserData() == (void*)ut::f_Floor)
 			{
-				m_CollisionList.back().second.first->SetState(STANDING);
+				_collisionList.back().second.first->SetState(STANDING);
 				return;
 			}
 	}
-	else if (m_CollisionList.back().second.second->GetBody()->GetUserData() == (void*)ut::b_Weapon)
+	else if (_collisionList.back().second.second->GetBody()->GetUserData() == (void*)ut::b_Weapon)
 	{
-		if (m_CollisionList.back().second.second->GetUserData() == (void*)ut::f_Hitbox)
-			if (m_CollisionList.back().first.second->GetBody()->GetUserData() == (void*)ut::b_Doodad)
-				if (m_CollisionList.back().first.second->GetUserData() == (void*)ut::f_Hurtbox)
+		if (_collisionList.back().second.second->GetUserData() == (void*)ut::f_Hitbox)
+			if (_collisionList.back().first.second->GetBody()->GetUserData() == (void*)ut::b_Doodad)
+				if (_collisionList.back().first.second->GetUserData() == (void*)ut::f_Hurtbox)
 				{
-					m_CollisionList.back().first.second->GetBody()->ApplyLinearImpulse(Utility::SFVECtoB2VEC(m_CollisionList.back().second.first->GetHitVector(), true), m_CollisionList.back().first.second->GetBody()->GetWorldCenter(), true);
+					_collisionList.back().first.second->GetBody()->ApplyLinearImpulse(Utility::SFVECtoB2VEC(_collisionList.back().second.first->GetHitVector(), true), _collisionList.back().first.second->GetBody()->GetWorldCenter(), true);
 					return;
 				}
 	}
@@ -76,42 +76,42 @@ void CollisionHandler::EndContact(b2Contact * contact)
 {
 	std::pair<std::pair<GameObject*, b2Fixture*>, std::pair<GameObject*, b2Fixture*>> collision;
 
-	for (int i = 0; i < m_ObjectManager.GetObjects().size(); i++)
+	for (int i = 0; i < _objectManager.GetObjects().size(); i++)
 	{
-		for (b2Fixture* f = m_ObjectManager.GetObjects()[i]->GetBody()->GetFixtureList(); f; f = f->GetNext())
+		for (b2Fixture* f = _objectManager.GetObjects()[i]->GetBody()->GetFixtureList(); f; f = f->GetNext())
 		{
 			if (contact->GetFixtureA() == f)
-				collision.first = std::pair<GameObject*, b2Fixture*>(m_ObjectManager.GetObjects()[i], f);
+				collision.first = std::pair<GameObject*, b2Fixture*>(_objectManager.GetObjects()[i], f);
 			if (contact->GetFixtureB() == f)
-				collision.second = std::pair<GameObject*, b2Fixture*>(m_ObjectManager.GetObjects()[i], f);
+				collision.second = std::pair<GameObject*, b2Fixture*>(_objectManager.GetObjects()[i], f);
 		}
 	}
 
 
-	for (int i = 0; i < m_CollisionList.size(); i++)
+	for (int i = 0; i < _collisionList.size(); i++)
 	{
-		if (m_CollisionList[i] == collision)
+		if (_collisionList[i] == collision)
 		{
 
-			if (m_CollisionList[i].first.second->GetBody()->GetUserData() == (void*)ut::b_Character)
+			if (_collisionList[i].first.second->GetBody()->GetUserData() == (void*)ut::b_Character)
 			{
-				if (m_CollisionList[i].first.second->GetUserData() == (void*)ut::f_Foot)
-					if (m_CollisionList[i].second.second->GetUserData() == (void*)ut::f_Floor)
+				if (_collisionList[i].first.second->GetUserData() == (void*)ut::f_Foot)
+					if (_collisionList[i].second.second->GetUserData() == (void*)ut::f_Floor)
 					{
-						m_CollisionList[i].first.first->SetState(AIRBORNE);
+						_collisionList[i].first.first->SetState(AIRBORNE);
 					}
 			}
 
-			if (m_CollisionList[i].second.second->GetBody()->GetUserData() == (void*)ut::b_Character)
+			if (_collisionList[i].second.second->GetBody()->GetUserData() == (void*)ut::b_Character)
 			{
-				if (m_CollisionList[i].second.second->GetUserData() == (void*)ut::f_Foot)
-					if (m_CollisionList[i].first.second->GetUserData() == (void*)ut::f_Floor)
+				if (_collisionList[i].second.second->GetUserData() == (void*)ut::f_Foot)
+					if (_collisionList[i].first.second->GetUserData() == (void*)ut::f_Floor)
 					{
-						m_CollisionList[i].second.first->SetState(AIRBORNE);
+						_collisionList[i].second.first->SetState(AIRBORNE);
 					}
 			}
 
-			m_CollisionList.erase(m_CollisionList.begin() + i);
+			_collisionList.erase(_collisionList.begin() + i);
 			continue;
 		}
 	}
@@ -129,14 +129,14 @@ void CollisionHandler::Update()
 {
 }
 
-CollisionHandler::CollisionHandler(ObjectManager &ObjectManagerRef) : m_ObjectManager(ObjectManagerRef)
+CollisionHandler::CollisionHandler(ObjectManager &ObjectManagerRef) : _objectManager(ObjectManagerRef)
 {
-	m_CollisionList = std::vector<std::pair<std::pair<GameObject*, b2Fixture*>, std::pair<GameObject*, b2Fixture*>>>();
+	_collisionList = std::vector<std::pair<std::pair<GameObject*, b2Fixture*>, std::pair<GameObject*, b2Fixture*>>>();
 }
 
-CollisionHandler::CollisionHandler() : m_ObjectManager(*new ObjectManager)
+CollisionHandler::CollisionHandler() : _objectManager(*new ObjectManager)
 {
-	m_CollisionList = std::vector<std::pair<std::pair<GameObject*, b2Fixture*>, std::pair<GameObject*, b2Fixture*>>>();
+	_collisionList = std::vector<std::pair<std::pair<GameObject*, b2Fixture*>, std::pair<GameObject*, b2Fixture*>>>();
 }
 
 CollisionHandler::~CollisionHandler()

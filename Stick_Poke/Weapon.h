@@ -3,8 +3,6 @@
 
 #include <SFML/Graphics.hpp>
 #include "GameObject.h"
-#include <iostream>
-#include <stdlib.h>
 
 #define DEFAULT_RADIUS 50.0f
 #define DEFAULT_WEAPON_WIDTH 100.0f
@@ -16,72 +14,72 @@ enum Grip { G_TWOHAND, G_FRONTHAND, G_BACKHAND};
 class Weapon : public GameObject
 {
 private:
-	bool m_Flip;
-	Grip m_Grip = G_TWOHAND;
+	bool _flip;
+	Grip _grip = G_TWOHAND;
 
-	float m_TopSpeed = 100;
-	float m_CurrentSpeed = 100;
+	float _topSpeed = 100;
+	float _currentSpeed = 100;
 
-	sf::Vector2f m_ControlOffset;
-	sf::Vector2f m_TargetOffset;
-	sf::Vector2f m_AnchorOffset;
-	sf::Vector2f m_HitboxOffset;
-	float m_FrontHandOffset;
-	float m_BackHandOffset;
+	sf::Vector2f _controlOffset;
+	sf::Vector2f _targetOffset;
+	sf::Vector2f _anchorOffset;
+	sf::Vector2f _hitboxOffset;
+	float _frontHandOffset;
+	float _backHandOffset;
 
-	sf::Vector2f m_FrontHandPos;
-	sf::Vector2f m_BackHandPos;
-	sf::Vector2f m_TargetPos;
-	sf::Vector2f m_ControlPos;
-	sf::Vector2f m_AnchorPos;
+	sf::Vector2f _frontHandPos;
+	sf::Vector2f _backHandPos;
+	sf::Vector2f _targetPos;
+	sf::Vector2f _controlPos;
+	sf::Vector2f _anchorPos;
 
-	sf::Vector2f m_OldCharPos;
-	sf::Vector2f m_OldHitboxPos;
+	sf::Vector2f _oldCharPos;
+	sf::Vector2f _oldHitboxPos;
 	
-	sf::CircleShape m_Circle;
-	sf::CircleShape m_ControlCircle;
-	sf::CircleShape m_TargetCircle;
-	sf::CircleShape m_AnchorCircle;
-	sf::CircleShape m_FrontHandCircle;
-	sf::CircleShape m_BackHandCircle;
-	sf::CircleShape m_HitCircle;
+	sf::CircleShape _circle;
+	sf::CircleShape _controlCircle;
+	sf::CircleShape _targetCircle;
+	sf::CircleShape _anchorCircle;
+	sf::CircleShape _frontHandCircle;
+	sf::CircleShape _backHandCircle;
+	sf::CircleShape _hitCircle;
 
-	sf::RectangleShape m_WeaponRect;
+	sf::RectangleShape _weaponRect;
 
 	sf::Vector2f Seek(sf::Vector2f Target, sf::Vector2f Current);
 public:
-	void SetTargetOffset(sf::Vector2f TargetOffset) { m_TargetOffset = TargetOffset;};
-	void SetAnchorOffset(sf::Vector2f AnchorOffset) { m_AnchorOffset = AnchorOffset; };
-	void SetHitboxOffset(sf::Vector2f HitboxOffset) { m_HitboxOffset = HitboxOffset; };
-	void SetWeaponSize(sf::Vector2f WeaponSize) { m_WeaponRect.setSize(WeaponSize); m_WeaponRect.setOrigin(WeaponSize.x / 2, WeaponSize.y / 2); };
-	void SetWeaponOrigin(sf::Vector2f WeaponOrigin) { m_WeaponRect.setOrigin(WeaponOrigin); };
-	void SetControlRadius(float ControlRadius) { m_Circle.setRadius(ControlRadius); m_Circle.setOrigin(sf::Vector2f(ControlRadius, ControlRadius)); };
-	void SetHitboxRadius(float HitboxRadius) { m_HitCircle.setRadius(HitboxRadius); m_HitCircle.setOrigin(sf::Vector2f(HitboxRadius, HitboxRadius)); };
-	void SetFrontHandOffset(float FrontHandOffset) { m_FrontHandOffset = FrontHandOffset; };
-	void SetBackHandOffset(float BackHandOffset) { m_BackHandOffset = BackHandOffset; };
-	void SetTopSpeed(float Speed) { m_TopSpeed = Speed; };
-	void SetSpeed(float Speed) { m_CurrentSpeed = Speed; };
-	void SetGrip(Grip NewGrip) { m_Grip = NewGrip; };
+	void SetTargetOffset(sf::Vector2f TargetOffset) { _targetOffset = TargetOffset;};
+	void SetAnchorOffset(sf::Vector2f AnchorOffset) { _anchorOffset = AnchorOffset; };
+	void SetHitboxOffset(sf::Vector2f HitboxOffset) { _hitboxOffset = HitboxOffset; };
+	void SetWeaponSize(sf::Vector2f WeaponSize) { _weaponRect.setSize(WeaponSize); _weaponRect.setOrigin(WeaponSize.x / 2, WeaponSize.y / 2); };
+	void SetWeaponOrigin(sf::Vector2f WeaponOrigin) { _weaponRect.setOrigin(WeaponOrigin); };
+	void SetControlRadius(float ControlRadius) { _circle.setRadius(ControlRadius); _circle.setOrigin(sf::Vector2f(ControlRadius, ControlRadius)); };
+	void SetHitboxRadius(float HitboxRadius) { _hitCircle.setRadius(HitboxRadius); _hitCircle.setOrigin(sf::Vector2f(HitboxRadius, HitboxRadius)); };
+	void SetFrontHandOffset(float FrontHandOffset) { _frontHandOffset = FrontHandOffset; };
+	void SetBackHandOffset(float BackHandOffset) { _backHandOffset = BackHandOffset; };
+	void SetTopSpeed(float Speed) { _topSpeed = Speed; };
+	void SetSpeed(float Speed) { _currentSpeed = Speed; };
+	void SetGrip(Grip NewGrip) { _grip = NewGrip; };
 
-	void ResetSpeed() { m_CurrentSpeed = m_TopSpeed; };
+	void ResetSpeed() { _currentSpeed = _topSpeed; };
 
 	sf::Vector2f GetHitVector();
-	sf::Vector2f GetFrontHandPos() { return m_Flip ? m_BackHandPos : m_FrontHandPos; };
-	sf::Vector2f GetBackHandPos() { return m_Flip ? m_FrontHandPos : m_BackHandPos; };
-	sf::Vector2f GetHitboxOffset() { return m_HitboxOffset; };
-	sf::RectangleShape GetWeaponRect() { return m_WeaponRect; };
-	sf::CircleShape GetControlCircle() { return m_ControlCircle; };
-	sf::CircleShape GetTargetCircle() { return m_TargetCircle; };
-	sf::CircleShape GetAnchorCircle() { return m_AnchorCircle; };
-	sf::CircleShape GetFrontHandCircle() { return m_FrontHandCircle; };
-	sf::CircleShape GetBackHandCircle() { return m_BackHandCircle; };
-	sf::CircleShape GetCircle() { return m_Circle; };
-	sf::CircleShape GetHitCircle() { return m_HitCircle; };
-	float GetFrontHandOffset() { return m_FrontHandOffset; };
-	float GetBackHandOffset() { return m_BackHandOffset; };
-	float GetTopSpeed() { return m_TopSpeed; };
-	sf::Vector2f GetWeaponOffset() { return m_ControlPos; };
-	Grip GetGrip() { return m_Grip; };
+	sf::Vector2f GetFrontHandPos() { return _flip ? _backHandPos : _frontHandPos; };
+	sf::Vector2f GetBackHandPos() { return _flip ? _frontHandPos : _backHandPos; };
+	sf::Vector2f GetHitboxOffset() { return _hitboxOffset; };
+	sf::RectangleShape GetWeaponRect() { return _weaponRect; };
+	sf::CircleShape GetControlCircle() { return _controlCircle; };
+	sf::CircleShape GetTargetCircle() { return _targetCircle; };
+	sf::CircleShape GetAnchorCircle() { return _anchorCircle; };
+	sf::CircleShape GetFrontHandCircle() { return _frontHandCircle; };
+	sf::CircleShape GetBackHandCircle() { return _backHandCircle; };
+	sf::CircleShape GetCircle() { return _circle; };
+	sf::CircleShape GetHitCircle() { return _hitCircle; };
+	float GetFrontHandOffset() { return _frontHandOffset; };
+	float GetBackHandOffset() { return _backHandOffset; };
+	float GetTopSpeed() { return _topSpeed; };
+	sf::Vector2f GetWeaponOffset() { return _controlPos; };
+	Grip GetGrip() { return _grip; };
 
 	Weapon();
 	Weapon(Weapon *NewWeapon);

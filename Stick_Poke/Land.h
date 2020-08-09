@@ -10,19 +10,19 @@
 class Land : public GameObject
 {
 private:
-	std::vector<sf::RectangleShape*> m_RectList;
-	sf::Vector2f m_Origin, m_Size, m_Center;
-	sf::Color m_Color1 = sf::Color::Magenta, m_Color2 = sf::Color::Blue;
+	std::vector<sf::RectangleShape*> _rectList;
+	sf::Vector2f _origin, _size, _center;
+	sf::Color _color1 = sf::Color::Magenta, _color2 = sf::Color::Blue;
 
 public:
-	void SetState(state State) { m_State = IDLE; };
+	void SetState(state State) { _state = IDLE; };
 
-	std::vector<sf::RectangleShape*> GetRectList() { return m_RectList; };
-	sf::Vector2f GetCenter() { return m_Center; };
+	std::vector<sf::RectangleShape*> GetRectList() { return _rectList; };
+	sf::Vector2f GetCenter() { return _center; };
 	sf::RectangleShape GetShape();
 
 	void Draw(sf::RenderWindow &Window);
-	void Update();
+	void Update(float Delta);
 
 	Land(b2World &World, sf::Vector2f Size);
 	Land();

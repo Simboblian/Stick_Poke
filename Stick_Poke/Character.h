@@ -3,6 +3,7 @@
 
 #include "GameObject.h"
 #include "UIProgressBar.h"
+#include "AnimationHandler.h"
 #include "Input.h"
 #include "Weapon.h"
 
@@ -32,53 +33,57 @@ enum ActionState
 class Character : public GameObject
 {
 private:
-	bool m_Flip = false;
+	AnimationHandler* _animation;
 
-	MoveState m_MoveState = MS_IDLE;
-	ActionState m_ActionState = AS_STANCE0;
-	int m_ActiveWeapon = 0;
+	bool _flip = false;
 
-	UIProgressBar m_Energy;
-	UIProgressBar m_Life;
+	MoveState _moveState = MS_IDLE;
+	ActionState _actionState = AS_STANCE0;
+	int _activeWeapon = 0;
 
-	sf::RectangleShape m_Rect;
+	UIProgressBar _energy;
+	UIProgressBar _life;
 
-	sf::RectangleShape m_BackBicep;
-	sf::CircleShape m_BackElbowCircle;
-	sf::RectangleShape m_BackForearm;
+	sf::RectangleShape _rect;
 
-	sf::RectangleShape m_FrontBicep;
-	sf::CircleShape m_FrontElbowCircle;
-	sf::RectangleShape m_FrontForearm;
+	sf::RectangleShape _backBicep;
+	sf::CircleShape _backElbowCircle;
+	sf::RectangleShape _backForearm;
 
-	sf::VertexArray m_BackArm;
-	sf::VertexArray m_FrontArm;
-	sf::Vector2f m_Velocity;
-	sf::Vector2f m_OldWeaponPos;
-	sf::Vector2f m_WeaponPos;
-	sf::Vector2f m_BackShoulder;
-	sf::Vector2f m_BackElbow;
-	sf::Vector2f m_FrontShoulder;
-	sf::Vector2f m_FrontElbow;
+	sf::RectangleShape _frontBicep;
+	sf::CircleShape _frontElbowCircle;
+	sf::RectangleShape _frontForearm;
+
+	sf::VertexArray _backArm;
+	sf::VertexArray _frontArm;
+	sf::Vector2f _velocity;
+	sf::Vector2f _oldWeaponPos;
+	sf::Vector2f _weaponPos;
+	sf::Vector2f _backShoulder;
+	sf::Vector2f _backElbow;
+	sf::Vector2f _frontShoulder;
+	sf::Vector2f _frontElbow;
 
 	float deg = 90;
 
-	Weapon* m_Weapon;
-	Weapon* m_Weapon1;
-	Weapon* m_Weapon2;
+	Weapon* _weapon;
+	Weapon* _weapon1;
+	Weapon* _weapon2;
 	sf::Vector2f CalculateElbow(sf::Vector2f Shoulder, sf::Vector2f Wrist);
 	void UpdateArmPositions();
 public:
-	void Draw(sf::RenderWindow &Window);
-	void Update();
+	//spine::SkeletonDrawable* GetDrawable() { return m_Animation->GetDrawable(); };
 
-	void SetState(state State) { m_State = State; };
-	sf::RectangleShape GetShape() { return m_Rect; };
-	sf::Vector2f GetWeaponOffset() { return m_Weapon->GetWeaponOffset(); };
-	Weapon* GetWeapon() { return m_Weapon; };
+	void Draw(sf::RenderWindow &Window);
+	void Update(float Delta);
+
+	void SetState(state State) { _state = State; };
+	sf::RectangleShape GetShape() { return _rect; };
+	sf::Vector2f GetWeaponOffset() { return _weapon->GetWeaponOffset(); };
+	Weapon* GetWeapon() { return _weapon; };
 	void ReceiveInputs(Input* State);
 
-	Character(b2World &World);
+	Character(b2World& World, const char* JsonFilepath, const char* AtlasFilepath);
 	Character();
 	~Character();
 };

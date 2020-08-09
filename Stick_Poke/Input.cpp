@@ -11,44 +11,44 @@ sf::Vector2f Input::MouseToJoystick(sf::RenderWindow & Window, sf::Vector2f Char
 
 void Input::SetBindings(int Left, int Right, int Up, int Down, int Movement, int Item1, int Item2, int Item3, int Item4, int Stance1, int Stance2, sf::Joystick::Axis LX, sf::Joystick::Axis LY, sf::Joystick::Axis RX, sf::Joystick::Axis RY)
 {
-	m_ButtonID = ButtonID(Left, Right, Up, Down, Movement, Item1, Item2, Item3, Item4, Stance1, Stance2, LX, LY, RX, RY);
+	_buttonID = ButtonID(Left, Right, Up, Down, Movement, Item1, Item2, Item3, Item4, Stance1, Stance2, LX, LY, RX, RY);
 }
 
 void Input::TakeInputs(sf::RenderWindow &Window, sf::Vector2f CharacterPosition, int ControllerID)
 {
-	m_NewState = new ControlState(false);
+	_newState = new ControlState(false);
 
-	if (m_Device == Devices::Controller)
+	if (_device == Devices::Controller)
 	{
-		m_NewState->left = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.left);
-		m_NewState->right = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.right);
-		m_NewState->up = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.up);
-		m_NewState->down = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.down);
-		m_NewState->movement = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.movement);
-		m_NewState->item1 = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.item1);
-		m_NewState->item2 = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.item2);
-		m_NewState->item3 = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.item3);
-		m_NewState->item4 = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.item4);
-		m_NewState->stance1 = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.stance1);
-		m_NewState->stance2 = sf::Joystick::isButtonPressed(ControllerID, m_ButtonID.stance2);
-		m_NewState->lStick = sf::Vector2f(sf::Joystick::getAxisPosition(ControllerID, m_ButtonID.lAxisX), sf::Joystick::getAxisPosition(ControllerID, m_ButtonID.lAxisY));
-		m_NewState->rStick = sf::Vector2f(sf::Joystick::getAxisPosition(ControllerID, m_ButtonID.rAxisX), sf::Joystick::getAxisPosition(ControllerID, m_ButtonID.rAxisY));
+		_newState->left = sf::Joystick::isButtonPressed(ControllerID, _buttonID.left);
+		_newState->right = sf::Joystick::isButtonPressed(ControllerID, _buttonID.right);
+		_newState->up = sf::Joystick::isButtonPressed(ControllerID, _buttonID.up);
+		_newState->down = sf::Joystick::isButtonPressed(ControllerID, _buttonID.down);
+		_newState->movement = sf::Joystick::isButtonPressed(ControllerID, _buttonID.movement);
+		_newState->item1 = sf::Joystick::isButtonPressed(ControllerID, _buttonID.item1);
+		_newState->item2 = sf::Joystick::isButtonPressed(ControllerID, _buttonID.item2);
+		_newState->item3 = sf::Joystick::isButtonPressed(ControllerID, _buttonID.item3);
+		_newState->item4 = sf::Joystick::isButtonPressed(ControllerID, _buttonID.item4);
+		_newState->stance1 = sf::Joystick::isButtonPressed(ControllerID, _buttonID.stance1);
+		_newState->stance2 = sf::Joystick::isButtonPressed(ControllerID, _buttonID.stance2);
+		_newState->lStick = sf::Vector2f(sf::Joystick::getAxisPosition(ControllerID, _buttonID.lAxisX), sf::Joystick::getAxisPosition(ControllerID, _buttonID.lAxisY));
+		_newState->rStick = sf::Vector2f(sf::Joystick::getAxisPosition(ControllerID, _buttonID.rAxisX), sf::Joystick::getAxisPosition(ControllerID, _buttonID.rAxisY));
 	}
-	else if (m_Device == MouseKeyboard)
+	else if (_device == MouseKeyboard)
 	{
-		m_NewState->rStick = MouseToJoystick(Window, CharacterPosition);
+		_newState->rStick = MouseToJoystick(Window, CharacterPosition);
 
-		m_NewState->left = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
-		m_NewState->right = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
-		m_NewState->up = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
-		m_NewState->down = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
-		m_NewState->movement = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
-		m_NewState->item1 = sf::Keyboard::isKeyPressed(sf::Keyboard::Q);
-		m_NewState->item2 = sf::Keyboard::isKeyPressed(sf::Keyboard::E);
-		m_NewState->item3 = sf::Keyboard::isKeyPressed(sf::Keyboard::R);
-		m_NewState->item4 = sf::Keyboard::isKeyPressed(sf::Keyboard::F);
-		m_NewState->stance1 = sf::Mouse::isButtonPressed(sf::Mouse::Left);
-		m_NewState->stance2 = sf::Mouse::isButtonPressed(sf::Mouse::Right);
+		_newState->left = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
+		_newState->right = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
+		_newState->up = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
+		_newState->down = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
+		_newState->movement = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
+		_newState->item1 = sf::Keyboard::isKeyPressed(sf::Keyboard::Q);
+		_newState->item2 = sf::Keyboard::isKeyPressed(sf::Keyboard::E);
+		_newState->item3 = sf::Keyboard::isKeyPressed(sf::Keyboard::R);
+		_newState->item4 = sf::Keyboard::isKeyPressed(sf::Keyboard::F);
+		_newState->stance1 = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+		_newState->stance2 = sf::Mouse::isButtonPressed(sf::Mouse::Right);
 		
 		//etc...
 	}
@@ -56,29 +56,29 @@ void Input::TakeInputs(sf::RenderWindow &Window, sf::Vector2f CharacterPosition,
 
 void Input::Update(sf::RenderWindow &Window, sf::Vector2f CharacterPosition, sf::Vector2f CameraPosition)
 {
-	if (m_Device == MouseKeyboard)
-		sf::Mouse::setPosition(sf::Vector2i(Window.getPosition().x + (Window.getSize().x / 2) + m_NewState->rStick.x, Window.getPosition().y + (Window.getSize().y / 2) + m_NewState->rStick.y));
+	if (_device == MouseKeyboard)
+		sf::Mouse::setPosition(sf::Vector2i(Window.getPosition().x + (Window.getSize().x / 2) + _newState->rStick.x, Window.getPosition().y + (Window.getSize().y / 2) + _newState->rStick.y));
 
-	m_InputBuffer[m_FrameIndex] = m_NewState;
+	_inputBuffer[_frameIndex] = _newState;
 
-	if (++m_FrameIndex >= BUFFERSIZE)
-		m_FrameIndex = 0;
+	if (++_frameIndex >= BUFFERSIZE)
+		_frameIndex = 0;
 }
 
 ControlState * Input::GetInputBuffer()
 {
 	bool returnValue = false;
-	int i = m_FrameIndex;
-	m_FrameIndex - 1 < 0 ? i = BUFFERSIZE - 1 : i -= 1;
-	return m_InputBuffer[i];
+	int i = _frameIndex;
+	_frameIndex - 1 < 0 ? i = BUFFERSIZE - 1 : i -= 1;
+	return _inputBuffer[i];
 }
 
 bool Input::WasInputDownAtFrame(Control input, int numberOfFramesAgo)
 {
 	bool returnValue = false;
-	int i = m_FrameIndex;
-	m_FrameIndex - numberOfFramesAgo < 0 ? i = BUFFERSIZE - 1 : i -= numberOfFramesAgo;
-	ControlState* currentState = m_InputBuffer[i];
+	int i = _frameIndex;
+	_frameIndex - numberOfFramesAgo < 0 ? i = BUFFERSIZE - 1 : i -= numberOfFramesAgo;
+	ControlState* currentState = _inputBuffer[i];
 	
 	switch (input)
 	{
@@ -141,12 +141,12 @@ bool Input::WasInputHeldForFrames(Control input, int numberOfFramesAgo, int fram
 
 Input::Input()
 {
-	m_NewState = new ControlState(false);
+	_newState = new ControlState(false);
 
 	for (int i = 0; i < BUFFERSIZE; i++)
-		m_InputBuffer[i] = new ControlState(false);
+		_inputBuffer[i] = new ControlState(false);
 
-	m_FrameIndex = 0;
+	_frameIndex = 0;
 }
 
 

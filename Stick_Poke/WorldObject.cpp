@@ -2,31 +2,31 @@
 
 void WorldObject::Draw(sf::RenderWindow & Window)
 {
-	Window.draw(m_Rect);
+	Window.draw(_rect);
 }
 
-void WorldObject::Update()
+void WorldObject::Update(float Delta)
 {
-	m_Position = sf::Vector2f(Utility::B2VECtoSFVEC(m_Body->GetPosition(), true));
-	m_Rect.setPosition(m_Position);
+	_position = sf::Vector2f(Utility::B2VECtoSFVEC(_body->GetPosition(), true));
+	_rect.setPosition(_position);
 }
 
 WorldObject::WorldObject(b2World & World, sf::Vector2f Size, sf::Vector2f Position)
 {
-	m_Position = Position;
+	_position = Position;
 
-	m_Rect.setSize(Size);
-	m_Rect.setOrigin(m_Rect.getSize().x / 2, m_Rect.getSize().y / 2);
-	m_Rect.setPosition(m_Position);
-	m_Rect.setFillColor(sf::Color::Red);
+	_rect.setSize(Size);
+	_rect.setOrigin(_rect.getSize().x / 2, _rect.getSize().y / 2);
+	_rect.setPosition(_position);
+	_rect.setFillColor(sf::Color::Red);
 
 	InitSquareBody(World, Size);
-	m_Body->SetTransform(Utility::SFVECtoB2VEC(m_Position, true), 0);
-	m_Body->SetGravityScale(0.25);
-	m_Body->GetFixtureList()->SetFriction(1);
+	_body->SetTransform(Utility::SFVECtoB2VEC(_position, true), 0);
+	_body->SetGravityScale(0.25);
+	_body->GetFixtureList()->SetFriction(1);
 
-	m_Body->SetUserData((void*)ut::b_Doodad);
-	m_Body->GetFixtureList()->SetUserData((void*)ut::f_Hurtbox);
+	_body->SetUserData((void*)ut::b_Doodad);
+	_body->GetFixtureList()->SetUserData((void*)ut::f_Hurtbox);
 }
 
 WorldObject::WorldObject()

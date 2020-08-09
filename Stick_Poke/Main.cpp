@@ -1,20 +1,16 @@
-#include <Windows.h>
 #include "Engine.h"
 
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
+int main()
 {
 	Engine* engine = new Engine();
-
-	AllocConsole();
-	freopen("CONOUT$", "w", stdout);
 
 	try
 	{
 		engine->Go();
 	}
-	catch(char* e)
+	catch (char* e)
 	{
-		MessageBoxA(NULL, e, "Exception Occurred", MB_OK | MB_ICONERROR);
+		//oops
 	}
 
 	return 0;

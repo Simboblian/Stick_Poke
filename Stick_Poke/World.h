@@ -8,12 +8,12 @@
 class World
 {
 private:
-	std::vector<Land*> m_LandList;
+	std::vector<Land*> _landList;
 
 public:
 	void Update();
 	void Draw(sf::RenderWindow &Window);
-	std::vector<Land*> GetLandList() { return m_LandList; };
+	std::vector<Land*> GetLandList() { return _landList; };
 
 	sf::Vector2f GetCenter();
 

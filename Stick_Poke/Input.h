@@ -88,21 +88,19 @@ class Input
 {
 private:
 	enum Devices {Controller, MouseKeyboard};
-	Devices m_Device = MouseKeyboard;
+	Devices _device = MouseKeyboard;
 	
-	int m_ControllerID;
+	int _controllerID;
 
-	sf::Vector2f m_MousePos;
-	sf::Vector2i moPos;
-	sf::Vector2i freshMoPos;
+	sf::Vector2f _mousePos;
 
-	ControlState *m_InputBuffer[BUFFERSIZE];
-	ControlState *m_NewState;
-	ControlState m_OldState;
+	ControlState *_inputBuffer[BUFFERSIZE];
+	ControlState *_newState;
+	ControlState _oldState;
 
-	ButtonID m_ButtonID;
+	ButtonID _buttonID;
 
-	short m_FrameIndex;
+	short _frameIndex;
 
 	sf::Vector2f MouseToJoystick(sf::RenderWindow &Window, sf::Vector2f CharacterPosition);
 public:

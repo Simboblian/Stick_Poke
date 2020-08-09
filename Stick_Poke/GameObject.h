@@ -14,11 +14,11 @@ private:
 	virtual void CreateSquareFixture(sf::Vector2f Size);
 	virtual void CreateCircleFixture(float Radius);
 protected:
-	state m_State;
+	state _state;
 
-	b2Body *m_Body;
+	b2Body *_body;
 
-	sf::Vector2f m_Position;
+	sf::Vector2f _position;
 
 	virtual void InitRoundedBody(b2World &World, sf::Vector2f Size);
 	virtual void InitSquareBody(b2World &World, sf::Vector2f Size);
@@ -27,16 +27,16 @@ public:
 
 	//- OBJECT BASICS -//
 	virtual void Draw(sf::RenderWindow &Window);
-	virtual void Update();
+	virtual void Update(float Delta);
 	//----- SETS -----//
-	virtual void SetState(state State) { m_State = State; };
-	virtual void SetPosition(sf::Vector2f Position) { m_Position = Position; m_Body->SetTransform(Utility::SFVECtoB2VEC(m_Position, true), 0); };
-	virtual void SetPosition(b2Vec2 Position) { m_Position = Utility::B2VECtoSFVEC(Position, true); m_Body->SetTransform(Position, 0); };
+	virtual void SetState(state State) { _state = State; };
+	virtual void SetPosition(sf::Vector2f Position) { _position = Position; _body->SetTransform(Utility::SFVECtoB2VEC(_position, true), 0); };
+	virtual void SetPosition(b2Vec2 Position) { _position = Utility::B2VECtoSFVEC(Position, true); _body->SetTransform(Position, 0); };
 	//----- GETS -----//
-	virtual sf::Vector2f GetPosition() { return Utility::B2VECtoSFVEC(m_Body->GetPosition(), true); };
+	virtual sf::Vector2f GetPosition() { return Utility::B2VECtoSFVEC(_body->GetPosition(), true); };
 	virtual sf::Vector2f GetHitVector() { return sf::Vector2f(0, 0); };
 	virtual sf::RectangleShape GetShape() { return sf::RectangleShape(); };
-	virtual b2Body* GetBody() { return m_Body; };
+	virtual b2Body* GetBody() { return _body; };
 	//- CONSTRUCTORS -//
 	GameObject();
 	~GameObject();

@@ -3,31 +3,31 @@
 
 void UIProgressBar::Update(sf::Vector2f Position)
 {
-	if (m_Current > m_Max)
-		m_Current = m_Max;
-	else if (m_Current < 0)
-		m_Current = 0;
+	if (_current > _max)
+		_current = _max;
+	else if (_current < 0)
+		_current = 0;
 
-	m_FillPercent = (m_Current / m_Max);
+	_fillPercent = (_current / _max);
 
 	SetPosition(Position);
 
-	m_Fill.setSize(sf::Vector2f(m_Outline.getSize().x * m_FillPercent, m_Outline.getSize().y));
+	_fill.setSize(sf::Vector2f(_outline.getSize().x * _fillPercent, _outline.getSize().y));
 
-	if (m_AllowRegen)
+	if (_allowRegen)
 	{
-		if (m_Regen)
+		if (_regen)
 		{
-			if (m_RegenCount >= m_RegenMax)
+			if (_regenCount >= _regenMax)
 			{
-				m_Current++;
+				_current++;
 			}
 			else
 			{
-				m_RegenCount++;
+				_regenCount++;
 			}
 
-			if (m_Current >= m_Max)
+			if (_current >= _max)
 			{
 				StopRegen();
 			}
@@ -37,15 +37,15 @@ void UIProgressBar::Update(sf::Vector2f Position)
 
 void UIProgressBar::AllowRegen(float WaitTime)
 {
-	m_AllowRegen = true;
-	m_RegenMax = WaitTime;
-	m_RegenCount = 0;
+	_allowRegen = true;
+	_regenMax = WaitTime;
+	_regenCount = 0;
 }
 
 void UIProgressBar::Draw(sf::RenderWindow &Window)
 {
-	Window.draw(m_Fill);
-	Window.draw(m_Outline);
+	Window.draw(_fill);
+	Window.draw(_outline);
 }
 
 UIProgressBar::UIProgressBar()
@@ -54,22 +54,22 @@ UIProgressBar::UIProgressBar()
 
 UIProgressBar::UIProgressBar(sf::Vector2f Position, sf::Vector2f Size)
 {
-	m_Outline.setFillColor(sf::Color::Transparent);
-	m_Outline.setOutlineColor(sf::Color::White);
-	m_Outline.setOutlineThickness(1.0f);
-	m_Outline.setSize(Size);
-	m_Outline.setOrigin(Size.x / 2, Size.y / 2);
-	m_Outline.setPosition(Position);
+	_outline.setFillColor(sf::Color::Transparent);
+	_outline.setOutlineColor(sf::Color::White);
+	_outline.setOutlineThickness(1.0f);
+	_outline.setSize(Size);
+	_outline.setOrigin(Size.x / 2, Size.y / 2);
+	_outline.setPosition(Position);
 
-	m_Fill.setFillColor(sf::Color::White);
-	m_Fill.setOutlineColor(sf::Color::Transparent);
-	m_Fill.setSize(Size);
-	m_Fill.setOrigin(Size.x / 2, Size.y / 2);
-	m_Fill.setPosition(Position);
+	_fill.setFillColor(sf::Color::White);
+	_fill.setOutlineColor(sf::Color::Transparent);
+	_fill.setSize(Size);
+	_fill.setOrigin(Size.x / 2, Size.y / 2);
+	_fill.setPosition(Position);
 
-	m_AllowRegen = false;
-	m_RegenMax = 0;
-	m_RegenCount = 0;
+	_allowRegen = false;
+	_regenMax = 0;
+	_regenCount = 0;
 }
 
 

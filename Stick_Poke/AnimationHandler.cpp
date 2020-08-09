@@ -1,43 +1,26 @@
 #include "AnimationHandler.h"
 
-void AnimationHandler::Update(sf::Vector2f Position, int frames, float delta)
+void AnimationHandler::SetPosition(sf::Vector2i Position)
 {
-	_skeleton->x = Position.x;
-	_skeleton->y = Position.y;
-	Skeleton_updateWorldTransform(_skeleton);
+	_drawable->skeleton->setPosition(Position.x, Position.y);
+}
 
-	SkeletonBounds_update(_bounds, _skeleton, true);
+void AnimationHandler::SetPosition(float x, float y)
+{
+	_drawable->skeleton->setPosition(x, y);
+}
 
-	if(frames != NULL)
+void AnimationHandler::Update(float Delta)
+{
+	_drawable->update(Delta);
+
+	if (_drawable->state->getCurrent(0)->isComplete() && _drawable->state->getCurrent(0)->getNext() == NULL)
 	{
-		float duration = AnimationState_getCurrent(_drawable->state, 0)->animation->duration;
-		delta = (duration / frames);
+		_drawable->state->setAnimation(0, "m_stand", true);
 	}
-	
-	_drawable->update(delta);
 }
 
-void AnimationHandler::SetAnimation(string AnimationName, bool Flip, bool Loop)
-{
-	const char* a = AnimationName.c_str();
-	_skeleton->flipX = Flip;
-	if(_animationName != AnimationName)
-		AnimationState_setAnimationByName(_drawable->state, 0, a, Loop);
-	
-	_animationName = AnimationName;
-}
-
-void AnimationHandler::AddAnimation(string AnimationName, bool Flip, bool Loop)
-{
-	const char* a = AnimationName.c_str();
-	_skeleton->flipX = Flip;
-	if(_animationName != AnimationName)
-		AnimationState_addAnimationByName(_drawable->state, 0, a, Loop, 0);
-	
-	_animationName = AnimationName;
-}
-
-void AnimationHandler::Draw(sf::RenderWindow *Window)
+void AnimationHandler::Draw(sf::RenderWindow* Window)
 {
 	Window->draw(*_drawable);
 }
@@ -46,33 +29,33 @@ AnimationHandler::AnimationHandler()
 {
 }
 
-AnimationHandler::AnimationHandler(const char* filepath)
+AnimationHandler::AnimationHandler(const char* jsonFilepath, const char* atlasFilepath, sf::Vector2i Position)
 {
-	char result[100];
-	strcpy(result, filepath);
-	strcat(result, ".atlas");
-	_atlas = Atlas_createFromFile(result, 0);
-	_json = SkeletonJson_create(_atlas);
-	_json->scale = 0.85f;
-	strcpy(result, filepath);
-	strcat(result, ".json");
-	_skeletonData = SkeletonJson_readSkeletonDataFile(_json, result);
-	if (!_skeletonData)
-	{
-		printf("%s\n", _json->error);
-	}
-	SkeletonJson_dispose(_json);
-	_bounds = SkeletonBounds_create();
+	spine::SFMLTextureLoader textureLoader;
+	spine::Atlas* atlas = new spine::Atlas(atlasFilepath, &textureLoader);
+	spine::SkeletonJson json = spine::SkeletonJson(atlas);
+	spine::SkeletonData* skeleData = json.readSkeletonDataFile(jsonFilepath);
 
-	_stateData = AnimationStateData_create(_skeletonData);
+	spine::AnimationStateData* stateData = new spine::AnimationStateData(skeleData);
 
-	_drawable = new SkeletonDrawable(_skeletonData, _stateData);
+	stateData->setMix("m_walk_b", "m_walk_f", 0.2f);
+	stateData->setMix("m_walk_f", "m_walk_b", 0.2f);
+	stateData->setMix("m_walk_b", "m_stand", 0.2f);
+	stateData->setMix("m_walk_f", "m_stand", 0.2f);
+	stateData->setMix("m_stand", "m_walk_f", 0.2f);
+	stateData->setMix("m_stand", "m_walk_b", 0.2f);
+
+	_drawable = new spine::SkeletonDrawable(skeleData, stateData);
 	_drawable->timeScale = 1;
+	_drawable->setUsePremultipliedAlpha(true);
 
 	_skeleton = _drawable->skeleton;
-	_skeleton->flipX = false;
-	_skeleton->flipY = false;
-	Skeleton_setToSetupPose(_skeleton);
+	_skeleton->setToSetupPose();
+
+	_skeleton->setPosition(Position.x, Position.y);
+	_skeleton->updateWorldTransform();
+
+	_drawable->state->addAnimation(0, "m_stand", true, 0);
 }
 
 AnimationHandler::~AnimationHandler()

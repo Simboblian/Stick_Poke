@@ -10,7 +10,9 @@ void Engine::Go()
 
 void Engine::MainLoop()
 {
-	while(m_Window->isOpen())
+	_deltaClock = new sf::Clock();
+
+	while(_window->isOpen())
 	{
 		ProcessInput();
 
@@ -24,46 +26,47 @@ void Engine::MainLoop()
 bool Engine::Init()
 {
 	bool passInit = true;
+	_deltaClock = new sf::Clock();
 
-	m_Window = new sf::RenderWindow(sf::VideoMode(WINDOWSIZEX, WINDOWSIZEY), "Stick Poke"/*, sf::Style::Fullscreen*/);
-	m_Window->setFramerateLimit(FPS_DEFAULT);
-	m_Window->setMouseCursorGrabbed(true);
-	m_Window->setMouseCursorVisible(false);
+	_window = new sf::RenderWindow(sf::VideoMode(WINDOWSIZEX, WINDOWSIZEY), "Stick Poke"/*, sf::Style::Fullscreen*/);
+	_window->setFramerateLimit(FPS_DEFAULT);
+	_window->setMouseCursorGrabbed(true);
+	_window->setMouseCursorVisible(false);
 
-	if (!m_Window)
+	if (!_window)
 		passInit = false;
 
-	m_B2World = new b2World(Utility::SFVECtoB2VEC(GRAVITY, false));
+	_b2World = new b2World(Utility::SFVECtoB2VEC(GRAVITY, false));
 
-	m_DebugDraw = new SFMLDebugDraw(*m_Window);
+	_debugDraw = new SFMLDebugDraw(*_window);
 	uint32 _flags = 0;
 	//_flags += b2Draw::e_aabbBit;
 	//_flags += b2Draw::e_centerOfMassBit;
 	//_flags += b2Draw::e_pairBit;
 	//_flags += b2Draw::e_jointBit;
 	_flags += b2Draw::e_shapeBit;
-	m_DebugDraw->SetFlags(_flags);
+	_debugDraw->SetFlags(_flags);
 
-	m_B2World->SetDebugDraw(m_DebugDraw);
+	_b2World->SetDebugDraw(_debugDraw);
 
-	m_ObjectManager = new ObjectManager();
+	_objectManager = new ObjectManager();
 
-	m_CollisionHandler = new CollisionHandler(*m_ObjectManager);
-	m_B2World->SetContactListener(m_CollisionHandler);
+	_collisionHandler = new CollisionHandler(*_objectManager);
+	_b2World->SetContactListener(_collisionHandler);
 
 
 	//Create the world and add it's objects to the game;
-	m_World = new World(*m_B2World, sf::Vector2f(6400, 100));
-	for (int i = 0; i < m_World->GetLandList().size(); i++)
-		m_ObjectManager->AddObject(m_World->GetLandList()[i]);
+	_world = new World(*_b2World, sf::Vector2f(6400, 100));
+	for (int i = 0; i < _world->GetLandList().size(); i++)
+		_objectManager->AddObject(_world->GetLandList()[i]);
 
 	//Create the character and add it's objects to the game;
-	m_Character = new Character(*m_B2World);
-	m_ObjectManager->AddObject(m_Character);
-	m_ObjectManager->AddObject(m_Character->GetWeapon());
-	m_ObjectManager->AddObject(new WorldObject(*m_B2World, sf::Vector2f(50, 50), sf::Vector2f(500, 0)));
+	_character = new Character(*_b2World, "Resources/blank/blank.json", "Resources/blank/blank.atlas");
+	_objectManager->AddObject(_character);
+	_objectManager->AddObject(_character->GetWeapon());
+	_objectManager->AddObject(new WorldObject(*_b2World, sf::Vector2f(50, 50), sf::Vector2f(500, 0)));
 
-	m_Player = new Player(*m_Character, sf::Vector2f(WINDOWSIZEX, WINDOWSIZEY));
+	_player = new Player(*_character, sf::Vector2f(WINDOWSIZEX, WINDOWSIZEY));
 	
 	return passInit;
 }
@@ -73,33 +76,33 @@ void Engine::ProcessInput()
 {
 	sf::Event evt;
 
-	while (m_Window->pollEvent(evt))
+	while (_window->pollEvent(evt))
 	{
 		if (evt.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-			m_Window->close();
+			_window->close();
 	}
 
-	m_Player->ProcessInputs(*m_Window);
+	_player->ProcessInputs(*_window);
 }
 
 // Updates the game
 void Engine::Update()
 {
-	m_B2World->Step(WORLDTIME, 8, 3);
+	_b2World->Step(WORLDTIME, 8, 3);
 
-	m_Player->Update(*m_Window);
-	m_ObjectManager->Update();
+	_player->Update(*_window);
+	_objectManager->Update(_deltaClock->getElapsedTime().asSeconds());
 }
 
 // Rendering the game to the screen
 void Engine::RenderFrame()
 {
-	m_Window->clear(sf::Color::Black);
+	_window->clear(sf::Color::Black);
 
-	m_ObjectManager->Draw(*m_Window);
-	m_B2World->DrawDebugData();
+	_objectManager->Draw(*_window);
+	_b2World->DrawDebugData();
 
-	m_Window->display();
+	_window->display();
 }
 
 // Constructors and Deconstructors

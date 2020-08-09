@@ -6,18 +6,18 @@
 class Camera
 {
 private:
-	sf::Vector2f m_Position, m_Size;
+	sf::Vector2f _position, _size;
 	
-	sf::View m_View;
-	sf::RectangleShape m_ViewWindow;
+	sf::View _view;
+	sf::RectangleShape _viewWindow;
 public:
-	sf::View GetCamera() { return m_View; };
-	sf::Vector2f GetStartPoint() { return sf::Vector2f(m_View.getCenter().x - m_View.getSize().x / 2, m_View.getCenter().y - m_View.getSize().y / 2); };
-	sf::RectangleShape GetViewWindow() { return m_ViewWindow; };
-	void SetZoom(float zoom) { m_View.zoom(zoom); };
+	sf::View GetCamera() { return _view; };
+	sf::Vector2f GetStartPoint() { return sf::Vector2f(_view.getCenter().x - _view.getSize().x / 2, _view.getCenter().y - _view.getSize().y / 2); };
+	sf::RectangleShape GetViewWindow() { return _viewWindow; };
+	void SetZoom(float zoom) { _view.zoom(zoom); };
 
-	void ApplyVector(sf::Vector2f Vector) { m_Position += Vector; };
-	void SetPosition(sf::Vector2f Position) { m_Position = Position; };
+	void ApplyVector(sf::Vector2f Vector) { _position += Vector; };
+	void SetPosition(sf::Vector2f Position) { _position = Position; };
 	
 	void Update(sf::RenderWindow & Window);
 

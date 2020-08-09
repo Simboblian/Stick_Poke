@@ -8,8 +8,8 @@
 static class CollisionHandler : public b2ContactListener
 {
 private:
-	ObjectManager &m_ObjectManager;
-	std::vector<std::pair<std::pair<GameObject*, b2Fixture*>, std::pair<GameObject*, b2Fixture*>>> m_CollisionList;
+	ObjectManager &_objectManager;
+	std::vector<std::pair<std::pair<GameObject*, b2Fixture*>, std::pair<GameObject*, b2Fixture*>>> _collisionList;
 public:
 	void BeginContact(b2Contact* contact);
 	void EndContact(b2Contact* contact);

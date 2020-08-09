@@ -21,16 +21,18 @@
 class Engine
 {
 private:
-	sf::RenderWindow	*m_Window;
+	sf::Clock			*_deltaClock;
 
-	b2World				*m_B2World;
-	SFMLDebugDraw		*m_DebugDraw;
+	sf::RenderWindow	*_window;
 
-	World				*m_World;
-	Player				*m_Player;
-	Character			*m_Character;
-	ObjectManager		*m_ObjectManager;
-	CollisionHandler	*m_CollisionHandler;
+	b2World				*_b2World;
+	SFMLDebugDraw		*_debugDraw;
+
+	World				*_world;
+	Player				*_player;
+	Character			*_character;
+	ObjectManager		*_objectManager;
+	CollisionHandler	*_collisionHandler;
 
 	bool Init();
 	void MainLoop();

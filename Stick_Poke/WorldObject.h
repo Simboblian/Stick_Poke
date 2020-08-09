@@ -6,10 +6,10 @@
 class WorldObject : public GameObject
 {
 private:
-	sf::RectangleShape m_Rect;
+	sf::RectangleShape _rect;
 public:
 	void Draw(sf::RenderWindow &Window);
-	void Update();
+	void Update(float Delta);
 
 	WorldObject(b2World &World, sf::Vector2f Size, sf::Vector2f Position);
 	WorldObject();

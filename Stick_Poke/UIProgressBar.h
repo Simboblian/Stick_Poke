@@ -6,31 +6,31 @@
 class UIProgressBar : public UIObject
 {
 private:
-	sf::RectangleShape m_Fill;
-	sf::RectangleShape m_Outline;
+	sf::RectangleShape _fill;
+	sf::RectangleShape _outline;
 
-	float m_Max;
-	float m_Current;
-	float m_FillPercent;
+	float _max;
+	float _current;
+	float _fillPercent;
 
-	bool m_AllowRegen;
-	bool m_Regen;
-	float m_RegenCount;
-	float m_RegenMax;
+	bool _allowRegen;
+	bool _regen;
+	float _regenCount;
+	float _regenMax;
 public:
 	void AllowRegen(float WaitTime);
-	void StartRegen() { m_Regen = true; };
-	void StopRegen() { m_Regen = false; m_RegenCount = 0; };
-	bool IsFull() { return(m_Current == m_Max); };
-	bool IsEmpty() { return(m_Current == 0); };
+	void StartRegen() { _regen = true; };
+	void StopRegen() { _regen = false; _regenCount = 0; };
+	bool IsFull() { return(_current == _max); };
+	bool IsEmpty() { return(_current == 0); };
 
-	void SetColour(sf::Color Colour) { m_Fill.setFillColor(Colour); };
-	void SetMax(float Max) { m_Max = Max; m_Current = m_Max; };
-	void SetCurrent(float Current) { m_Current = Current; if (m_AllowRegen) StopRegen(); };
-	void SetSize(sf::Vector2f Size) { m_Size = Size; m_Fill.setSize(m_Size); m_Outline.setSize(m_Size); };
-	void SetPosition(sf::Vector2f Position) { m_Position = Position; m_Fill.setPosition(m_Position); m_Outline.setPosition(m_Position); };
+	void SetColour(sf::Color Colour) { _fill.setFillColor(Colour); };
+	void SetMax(float Max) { _max = Max; _current = _max; };
+	void SetCurrent(float Current) { _current = Current; if (_allowRegen) StopRegen(); };
+	void SetSize(sf::Vector2f Size) { _size = Size; _fill.setSize(_size); _outline.setSize(_size); };
+	void SetPosition(sf::Vector2f Position) { _position = Position; _fill.setPosition(_position); _outline.setPosition(_position); };
 
-	float GetCurrent() { return m_Current; };
+	float GetCurrent() { return _current; };
 
 	void Update(sf::Vector2f Position);
 	void Draw(sf::RenderWindow &Window);

@@ -1,42 +1,33 @@
-#ifndef _ANIMATIONHANDLER_H
-#define _ANIMATIONHANDLER_H
+#ifndef _ANIMATION_HANDLER_H
+#define _ANIMATION_HANDLER_H
 
-#include <SFML\Graphics.hpp>
 #include <spine\spine-sfml.h>
+#include <SFML/Graphics.hpp>
 
-using namespace spine;
-using namespace std;
-
-#define REAL_DEALTA 0.016755
+#define REALDEALTA 0.016755
 
 class AnimationHandler
 {
-private:
-	Atlas *_atlas;
-	SkeletonBounds *_bounds;
-	SkeletonDrawable *_drawable;
-	Slot *_headSlot;
-	SkeletonJson *_json;
-	Skeleton *_skeleton;
-	SkeletonData *_skeletonData;
-	AnimationStateData *_stateData;
+private:	
+	spine::SkeletonDrawable* _drawable;
+	spine::Skeleton* _skeleton;
 
-	sf::Clock _deltaClock;
-
-	string _animationName;
+	bool _flip = false;
+	std::string _animationName;
 public:
-	AnimationHandler();
-	AnimationHandler(const char* filepath);
+	void Update(float Delta);
+	void Draw(sf::RenderWindow* Window);
 
-	void AddAnimation(string AnimationName, bool Flip, bool Loop);
-	void Draw(sf::RenderWindow *Window);
-	string GetName() { return AnimationState_getCurrent(_drawable->state, 0)->animation->name; };
-	SkeletonBounds* GetBounds() { return _bounds; };
-	SkeletonData* GetData() { return _skeletonData; };
-	Skeleton* GetSkeleton() { return _skeleton; };
-	void SetAnimation(string AnimationName, bool Flip, bool Loop);	
-	void Update(sf::Vector2f Position, int frames = NULL, float delta = REAL_DEALTA);
-	
+	spine::SkeletonDrawable* GetDrawable() { return _drawable; };
+	sf::Vector2i GetPosition() { return sf::Vector2i(_skeleton->getX(), _skeleton->getY()); };
+
+	void SetPosition(sf::Vector2i Position);
+	void SetPosition(float x, float y);
+
+	spine::Skeleton* GetSkeleton() { return _skeleton; };
+
+	AnimationHandler();
+	AnimationHandler(const char* jsonFilepath, const char* atlasFilepath, sf::Vector2i Position = sf::Vector2i(320, 320));
 	~AnimationHandler();
 };
 

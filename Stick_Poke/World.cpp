@@ -6,8 +6,8 @@ void World::Update()
 
 void World::Draw(sf::RenderWindow &Window)
 {
-	for (int i = 0; i < m_LandList.size(); i++)
-		m_LandList[i]->Draw(Window);
+	for (int i = 0; i < _landList.size(); i++)
+		_landList[i]->Draw(Window);
 }
 
 World::World()
@@ -18,10 +18,10 @@ sf::Vector2f World::GetCenter()
 {
 	sf::Vector2f result;
 
-	for (int i = 0; i < m_LandList.size(); i++)
-		result += m_LandList[i]->GetCenter();
+	for (int i = 0; i < _landList.size(); i++)
+		result += _landList[i]->GetCenter();
 
-	result = sf::Vector2f(result.x / m_LandList.size(), result.y / m_LandList.size());
+	result = sf::Vector2f(result.x / _landList.size(), result.y / _landList.size());
 
 	return result;
 }
@@ -29,7 +29,7 @@ sf::Vector2f World::GetCenter()
 World::World(b2World &World, sf::Vector2f Size)
 {
 	Land *l = new Land(World, Size);
-	m_LandList.push_back(l);
+	_landList.push_back(l);
 }
 
 World::~World()

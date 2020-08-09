@@ -6,13 +6,16 @@
 #include "Camera.h"
 #include "Input.h"
 
+
+
 class Player
 {
 private:
-	Character &m_Character;
+	Character defaultChar;
+	Character &_character;
 
-	Camera *m_Camera;
-	Input *m_Input;
+	Camera *_camera;
+	Input *_input;
 
 public:
 	void Initialize();

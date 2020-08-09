@@ -4,51 +4,51 @@ sf::RectangleShape Land::GetShape()
 {
 	sf::RectangleShape result;
 
-	result.setSize(m_Size);
-	result.setPosition(m_Position);
-	result.setOrigin(m_Origin);
+	result.setSize(_size);
+	result.setPosition(_position);
+	result.setOrigin(_origin);
 
 	return result;
 }
 
 void Land::Draw(sf::RenderWindow &Window)
 {
-	for (int i = 0; i < m_RectList.size(); i++)
-		Window.draw(*m_RectList[i], sf::RenderStates::Default);
+	for (int i = 0; i < _rectList.size(); i++)
+		Window.draw(*_rectList[i], sf::RenderStates::Default);
 }
 
-void Land::Update()
+void Land::Update(float Delta)
 {
-	m_Position = sf::Vector2f(Utility::B2VECtoSFVEC(m_Body->GetPosition(), true));
+	_position = sf::Vector2f(Utility::B2VECtoSFVEC(_body->GetPosition(), true));
 
-	for (int i = 0; i < m_RectList.size(); i++)
-		m_RectList[i]->setPosition(sf::Vector2f(i * SIZE, 0) - m_Origin + m_Position);
+	for (int i = 0; i < _rectList.size(); i++)
+		_rectList[i]->setPosition(sf::Vector2f(i * SIZE, 0) - _origin + _position);
 }
 
 Land::Land(b2World &World, sf::Vector2f Size)
 {
-	m_Size = Size;
-	m_Origin = sf::Vector2f(Size.x / 2, Size.y / 2);
-	m_Center = sf::Vector2f(m_Position.x, m_Position.y / 2);
+	_size = Size;
+	_origin = sf::Vector2f(Size.x / 2, Size.y / 2);
+	_center = sf::Vector2f(_position.x, _position.y / 2);
 
-	int capacity = ((int)m_Size.x - ((int)m_Size.x % SIZE)) / SIZE;
+	int capacity = ((int)_size.x - ((int)_size.x % SIZE)) / SIZE;
 
 	for (int i = 0; i < capacity; i++)
 	{
 		sf::RectangleShape *r = new sf::RectangleShape();
 		r->setSize(sf::Vector2f(SIZE, SIZE));
-		r->setPosition(sf::Vector2f(i * SIZE, 0) - m_Origin + m_Position);
+		r->setPosition(sf::Vector2f(i * SIZE, 0) - _origin + _position);
 		if (i % 2 == 0)
-			r->setFillColor(m_Color1);
+			r->setFillColor(_color1);
 		else
-			r->setFillColor(m_Color2);
-		m_RectList.push_back(r);
+			r->setFillColor(_color2);
+		_rectList.push_back(r);
 	}
 	
-	InitSquareBody(World, m_Size);
-	m_Body->SetType(b2_staticBody);
-	m_Body->SetUserData((void*)ut::b_Land);
-	m_Body->GetFixtureList()->SetUserData((void*)ut::f_Floor);
+	InitSquareBody(World, _size);
+	_body->SetType(b2_staticBody);
+	_body->SetUserData((void*)ut::b_Land);
+	_body->GetFixtureList()->SetUserData((void*)ut::f_Floor);
 
 	SetPosition(sf::Vector2f(750, 100));
 }
