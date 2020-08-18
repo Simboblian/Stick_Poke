@@ -100,6 +100,7 @@ void Engine::RenderFrame()
 	_window->clear(sf::Color::Black);
 
 	_objectManager->Draw(*_window);
+
 	_b2World->DrawDebugData();
 
 	_window->display();

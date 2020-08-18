@@ -196,7 +196,13 @@ sf::Vector2f Weapon::Seek(sf::Vector2f Target, sf::Vector2f Current)
 
 void Weapon::Update(sf::Vector2f ControlPos, sf::Vector2f CharPos, sf::Vector2f CharSize, bool Flip, bool AllowFlip)
 {
-	_flip = Flip;
+	bool justFlipped = false;
+
+	if (Flip != _flip)
+	{
+		_flip = Flip;
+		justFlipped = true;
+	}
 
 	if(_flip)
 	{
@@ -282,7 +288,7 @@ void Weapon::Update(sf::Vector2f ControlPos, sf::Vector2f CharPos, sf::Vector2f 
 		_targetPos = CharPos;
 		_targetPos += sf::Vector2f(_targetOffset.x + (ControlPos.x / 100 * _circle.getRadius()), _targetOffset.y + (ControlPos.y / 100 * _circle.getRadius()));
 		_targetCircle.setPosition(_targetPos);
-		
+
 		_controlOffset = _controlPos - _oldCharPos;
 
 		_controlPos = CharPos;
@@ -367,19 +373,14 @@ void Weapon::Update(sf::Vector2f ControlPos, sf::Vector2f CharPos, sf::Vector2f 
 	_oldCharPos = CharPos;
 }
 
+void Weapon::UpdateHandPosition(Grip CURRENTGRIP)
+{
+}
+
 
 void Weapon::Draw(sf::RenderWindow &Window, bool hitDebug)
 {
 	Window.draw(_weaponRect);
-	if(hitDebug)
-	{
-		Window.draw(_circle);
-		Window.draw(_targetCircle);
-		Window.draw(_controlCircle);
-		Window.draw(_targetCircle);
-		Window.draw(_anchorCircle);
-		Window.draw(_hitCircle);
-	}
 
 	if (_flip)
 	{
@@ -397,4 +398,15 @@ void Weapon::Draw(sf::RenderWindow &Window, bool hitDebug)
 		if (_grip == G_TWOHAND || _grip == G_BACKHAND)
 			Window.draw(_backHandCircle);
 	}
+
+	if(hitDebug)
+	{
+		Window.draw(_circle);
+		Window.draw(_targetCircle);
+		Window.draw(_controlCircle);
+		Window.draw(_targetCircle);
+		Window.draw(_anchorCircle);
+		Window.draw(_hitCircle);
+	}
+
 }

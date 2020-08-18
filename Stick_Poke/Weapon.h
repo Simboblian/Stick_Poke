@@ -90,6 +90,8 @@ public:
 	//b2Vec2 GetForce() { return b2Vec2(m_Body->GetLinearVelocity().x *  m_Body->GetMass(), m_Body->GetLinearVelocity().y *  m_Body->GetMass()); };
 
 	void Update(sf::Vector2f ControlPos, sf::Vector2f CharPos, sf::Vector2f CharSize, bool Flip, bool AllowFlip);
+	void UpdateHandPosition(Grip CURRENTGRIP);
+
 	void Draw(sf::RenderWindow &Window, bool hitDebug);
 };
 

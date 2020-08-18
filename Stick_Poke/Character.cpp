@@ -39,8 +39,17 @@ void Character::UpdateArmPositions()
 
 	_flip ? elbowDirection = -90 : elbowDirection = 90;
 
-	_backShoulder = sf::Vector2f(_rect.getPosition().x - (_rect.getSize().x / 2), _rect.getPosition().y - (_rect.getSize().y / 2) + (_rect.getSize().y / 5));
-	_frontShoulder = sf::Vector2f(_rect.getPosition().x + (_rect.getSize().x / 2), _rect.getPosition().y - (_rect.getSize().y / 2) + (_rect.getSize().y / 5));
+	if (_flip)
+	{
+		_backShoulder = _animation->GetBonePosition("BB_Bone");
+		_frontShoulder = _animation->GetBonePosition("FB_Bone");
+	}
+	else
+	{
+		_backShoulder = _animation->GetBonePosition("FB_Bone");
+		_frontShoulder = _animation->GetBonePosition("BB_Bone");
+	}
+
 	_backElbow = CalculateElbow(_backShoulder, _weapon->GetBackHandPos());
 	_frontElbow = CalculateElbow(_frontShoulder, _weapon->GetFrontHandPos());
 
@@ -72,7 +81,7 @@ void Character::Draw(sf::RenderWindow &Window)
 			Window.draw(_backForearm);
 			Window.draw(_backElbowCircle);
 			Window.draw(_backBicep);
-			Window.draw(_rect);
+			_animation->Draw(&Window);
 			Window.draw(_frontBicep);
 			Window.draw(_frontElbowCircle);
 			Window.draw(_frontForearm);
@@ -82,7 +91,7 @@ void Character::Draw(sf::RenderWindow &Window)
 			Window.draw(_frontForearm);
 			Window.draw(_frontElbowCircle);
 			Window.draw(_frontBicep);
-			Window.draw(_rect);
+			_animation->Draw(&Window);
 			Window.draw(_backBicep);
 			Window.draw(_backElbowCircle);
 			Window.draw(_backForearm);
@@ -96,14 +105,14 @@ void Character::Draw(sf::RenderWindow &Window)
 			Window.draw(_backForearm);
 			Window.draw(_backElbowCircle);
 			Window.draw(_backBicep);
-			Window.draw(_rect);
+			_animation->Draw(&Window);
 		}
 		else
 		{
 			Window.draw(_frontForearm);
 			Window.draw(_frontElbowCircle);
 			Window.draw(_frontBicep);
-			Window.draw(_rect);
+			_animation->Draw(&Window);
 		}
 		break;
 	case G_BACKHAND:
@@ -112,27 +121,27 @@ void Character::Draw(sf::RenderWindow &Window)
 			Window.draw(_backForearm);
 			Window.draw(_backElbowCircle);
 			Window.draw(_backBicep);
-			Window.draw(_rect);
+			_animation->Draw(&Window);
 		}
 		else
 		{
 			Window.draw(_frontForearm);
 			Window.draw(_frontElbowCircle);
 			Window.draw(_frontBicep);
-			Window.draw(_rect);
+			_animation->Draw(&Window);
 		}
 		_weapon->Draw(Window, true);
 		break;
 	}
 	_life.Draw(Window);
 	_energy.Draw(Window);
-	_animation->Draw(&Window);
 }
 
 void Character::Update(float Delta)
 {
 	b2Vec2 worldCenter = _body->GetWorldCenter();
 
+	//------ STATS/UI ------//
 	if (Utility::GetMagnitude(_oldWeaponPos - _weaponPos) > 10)
 		_energy.SetCurrent(_energy.GetCurrent() - 1);
 	else
@@ -150,12 +159,11 @@ void Character::Update(float Delta)
 		_energy.SetColour(sf::Color::Yellow);
 	}
 
-
+	//------ WEAPONS ------//
 	switch (_actionState)
 	{
 	default:
 	case AS_STANCE0:
-
 		if (_activeWeapon == 0)
 		{
 			_weapon->SetTargetOffset(sf::Vector2f(110.0f, 0.0f));
@@ -168,9 +176,6 @@ void Character::Update(float Delta)
 			_weapon->SetTargetOffset(sf::Vector2f(40.0f, 10.0f));
 			_weapon->SetControlRadius(40);
 		}
-
-		//Spear
-		//
 		break;
 	case AS_STANCE1:
 		if (_activeWeapon == 0)
@@ -202,69 +207,83 @@ void Character::Update(float Delta)
 		break;
 	}
 
-
 	//------ MOVEMENT ------//
 	_velocity = Utility::B2VECtoSFVEC(_body->GetLinearVelocity(), true);
+
 	float xForce = 0;
 	float yForce = 0;
 	bool Impulse = false;
+	float desiredVelX = 0;
+	float desiredVelY = 0;
 
 	switch (_moveState)
 	{
 	case MS_IDLE:
-		if(_state == STANDING)
-			xForce = _velocity.x * -2;
+		if (_state == STANDING)
+			desiredVelX = 0;
 		break;
 	case MS_WALKLEFT:
-		if (_velocity.x > -100)
-			xForce = -100;
-		else if(_velocity.x < -100 && _state == STANDING)
-			xForce = _velocity.x * -2;
+		if (!_flip)
+			_flip = true;
+		desiredVelX = -10;
 		break;
 	case MS_WALKRIGHT:
-		if (_velocity.x < 100)
-			xForce = 100;
-		else if (_velocity.x > 100 && _state == STANDING)
-			xForce = _velocity.x * -2;
+		if (_flip)
+			_flip = false;
+		desiredVelX = 10;
 		break;
 	case MS_DASHLEFT:
-		xForce = -200;
-		Impulse = true;
+		if (!_flip)
+			_flip = true;
+		desiredVelX = -15;
 		break;
 	case MS_DASHRIGHT:
-		xForce = 200;
-		Impulse = true;
+		if (_flip)
+			_flip = false;
+		desiredVelX = 15;
 		break;
 	case MS_JUMPLEFT:
-		yForce = -200;
-		xForce = -100;
-		Impulse = true;
+		if (!_flip)
+			_flip = true;
+		desiredVelY = -200;
+		_body->ApplyLinearImpulse(b2Vec2(0, desiredVelY), worldCenter, true);
+		desiredVelX = -15;
 		break;
 	case MS_JUMPRIGHT:
-		yForce = -200;
-		xForce = 100;
-		Impulse = true;
+		if (_flip)
+			_flip = false;
+		desiredVelY = -200;
+		_body->ApplyLinearImpulse(b2Vec2(0, desiredVelY), worldCenter, true);
+		desiredVelX = 15;
 		break;
 	case MS_JUMPUP:
-		yForce = -200;
-		Impulse = true;
+		desiredVelY = -200;
+		_body->ApplyLinearImpulse(b2Vec2(0, desiredVelY), worldCenter, true);
 		break;
 	}
 
-	if(Impulse)
-		_body->ApplyLinearImpulse(Utility::SFVECtoB2VEC(sf::Vector2f(xForce, yForce)), worldCenter, true);
+	float impulseX = _body->GetMass() * (desiredVelX - Utility::ScaleToB2(_velocity.x));
+	float impulseY = _body->GetMass() * (desiredVelY - Utility::ScaleToB2(_velocity.y));
+
+	_body->ApplyLinearImpulse(b2Vec2(impulseX, 0), worldCenter, true);
+
+	//------ ANIMATIONS ------//
+	if (_body->GetLinearVelocity().x < -0.5)
+		_animation->SetAnimation("m_walk_f");
+	else if (_body->GetLinearVelocity().x > 0.5)
+		_animation->SetAnimation("m_walk_f");
 	else
-		_body->ApplyForce(Utility::SFVECtoB2VEC(sf::Vector2f(xForce, yForce)), worldCenter, true);
+		_animation->SetAnimation("m_stand");
 
 	//------ POSITIONS ------//
 	_position = sf::Vector2f(Utility::B2VECtoSFVEC(_body->GetPosition(), true));
+	_animation->SetPosition(sf::Vector2i(_position.x, _position.y + _rect.getOrigin().y));
 	_rect.setPosition(_position);
-	_animation->SetPosition((sf::Vector2i)_position);
 
-	_animation->Update(Delta);
-	_weapon->Update(_weaponPos, _position, _rect.getSize(), _flip, false);
-	_energy.Update(sf::Vector2f(_position.x, _position.y - _rect.getSize().y));
-	_life.Update(sf::Vector2f(_position.x, _position.y - 3 - _rect.getSize().y - _rect.getSize().y / 20));
+	_animation->Update(Delta, _flip);
+	_weapon->Update(_weaponPos, _position, _rect.getSize(), _flip, true);
+	_energy.Update(sf::Vector2f(_position.x, _position.y - (_rect.getSize().y * 1.25)));
+	_life.Update(sf::Vector2f(_position.x, _position.y - 3 - (_rect.getSize().y * 1.25) - _rect.getSize().y / 20));
 
 	UpdateArmPositions();
 }
@@ -335,6 +354,8 @@ void Character::ReceiveInputs(Input* State)
 		_weapon->SetHitboxRadius(7.5f);
 		_weapon->SetTopSpeed(20);
 		_weapon->SetGrip(G_TWOHAND);
+		_animation->ShowBackArm(false);
+		_animation->ShowFrontArm(false);
 	}
 
 	if (State->GetInputBuffer()->item2)
@@ -350,6 +371,8 @@ void Character::ReceiveInputs(Input* State)
 		_weapon->SetFrontHandOffset(5);
 		_weapon->SetTopSpeed(20);
 		_weapon->SetGrip(G_FRONTHAND);
+		_animation->ShowBackArm(false);
+		_animation->ShowFrontArm(true);
 	}
 }
 
@@ -406,6 +429,8 @@ Character::Character(b2World &World, const char* JsonFilepath, const char* Atlas
 	_weapon->SetHitboxRadius(7.5f);
 	_weapon->SetTopSpeed(20);
 	_weapon->SetGrip(G_TWOHAND);
+	_animation->ShowBackArm(false);
+	_animation->ShowFrontArm(false);
 
 	for (int i = 0; i < _backArm.getVertexCount(); i++)
 	{
@@ -417,12 +442,12 @@ Character::Character(b2World &World, const char* JsonFilepath, const char* Atlas
 		_frontArm[i].color = sf::Color::Cyan;
 	}
 
-	_energy = UIProgressBar(sf::Vector2f(_position.x, _position.y - _rect.getSize().y), sf::Vector2f(_rect.getSize().x, _rect.getSize().y / 20));
+	_energy = UIProgressBar(sf::Vector2f(_position.x, _position.y - (_rect.getSize().y * 2)), sf::Vector2f(_rect.getSize().x, _rect.getSize().y / 20));
 	_energy.SetColour(sf::Color::Yellow);
 	_energy.SetMax(100);
 	_energy.AllowRegen(60);
 
-	_life = UIProgressBar(sf::Vector2f(_position.x, _position.y - _rect.getSize().y - _rect.getSize().y / 20), sf::Vector2f(_rect.getSize().x, _rect.getSize().y / 20));
+	_life = UIProgressBar(sf::Vector2f(_position.x, _position.y - (_rect.getSize().y * 2) - _rect.getSize().y / 20), sf::Vector2f(_rect.getSize().x, _rect.getSize().y / 20));
 	_life.SetMax(100);
 	_life.SetColour(sf::Color::Green);
 

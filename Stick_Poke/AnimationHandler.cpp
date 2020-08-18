@@ -10,14 +10,25 @@ void AnimationHandler::SetPosition(float x, float y)
 	_drawable->skeleton->setPosition(x, y);
 }
 
-void AnimationHandler::Update(float Delta)
+void AnimationHandler::SetAnimation(const char* Animation)
 {
-	_drawable->update(Delta);
+	_drawable->state->setAnimation(0, Animation, true);
+}
 
-	if (_drawable->state->getCurrent(0)->isComplete() && _drawable->state->getCurrent(0)->getNext() == NULL)
+void AnimationHandler::Update(float Delta, bool Flip)
+{
+	if (Flip != _flip)
 	{
-		_drawable->state->setAnimation(0, "m_stand", true);
+		_flip = Flip;
+
+		if (_flip)
+			_drawable->skeleton->setScaleX(-1);
+		else
+			_drawable->skeleton->setScaleX(1);
+
 	}
+
+	_drawable->update(Delta);
 }
 
 void AnimationHandler::Draw(sf::RenderWindow* Window)
@@ -37,17 +48,12 @@ AnimationHandler::AnimationHandler(const char* jsonFilepath, const char* atlasFi
 	spine::SkeletonData* skeleData = json.readSkeletonDataFile(jsonFilepath);
 
 	spine::AnimationStateData* stateData = new spine::AnimationStateData(skeleData);
-
-	stateData->setMix("m_walk_b", "m_walk_f", 0.2f);
-	stateData->setMix("m_walk_f", "m_walk_b", 0.2f);
-	stateData->setMix("m_walk_b", "m_stand", 0.2f);
-	stateData->setMix("m_walk_f", "m_stand", 0.2f);
-	stateData->setMix("m_stand", "m_walk_f", 0.2f);
-	stateData->setMix("m_stand", "m_walk_b", 0.2f);
+	stateData->setDefaultMix(1.0f);
 
 	_drawable = new spine::SkeletonDrawable(skeleData, stateData);
-	_drawable->timeScale = 1;
+	_drawable->timeScale = 2;
 	_drawable->setUsePremultipliedAlpha(true);
+
 
 	_skeleton = _drawable->skeleton;
 	_skeleton->setToSetupPose();
